@@ -1,2 +1,0 @@
-# myblog
-My markdown blog
