@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Picard Xie</title>
-    <link>https://bloodycoder.github.io/myblog/post/</link>
+    <link>https://bloodycoder.github.io/post/</link>
     <description>Recent content in Posts on Picard Xie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <managingEditor>picardxie@foxmail.com (Picard)</managingEditor>
     <webMaster>picardxie@foxmail.com (Picard)</webMaster>
     <lastBuildDate>Mon, 01 Aug 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://bloodycoder.github.io/myblog/post/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://bloodycoder.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>python爬虫入门(2):让你的github项目火起来</title>
-      <link>https://bloodycoder.github.io/myblog/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A82/</link>
+      <link>https://bloodycoder.github.io/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A82/</link>
       <pubDate>Mon, 01 Aug 2016 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/myblog/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A82/</guid>
+      <guid>https://bloodycoder.github.io/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A82/</guid>
       <description>
 
 &lt;p&gt;最近闲的比较无聊，于是想做一个自动star你的项目的爬虫玩玩。不然star数太低了，也比较难看。思路是准备注册成批的github帐号，然后挨个给你点star。&lt;/p&gt;
@@ -172,10 +172,10 @@ run(&#39;你的id&#39;,&#39;你的仓库名&#39;,需要点赞的次数)
     
     <item>
       <title>python爬虫入门(1):爬万本书籍</title>
-      <link>https://bloodycoder.github.io/myblog/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</link>
+      <link>https://bloodycoder.github.io/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</link>
       <pubDate>Wed, 27 Jul 2016 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/myblog/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</guid>
+      <guid>https://bloodycoder.github.io/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</guid>
       <description>
 
 &lt;p&gt;最近闲的无聊，想爬点书看看。 于是我选择了这个网站&lt;a href=&#34;http://www.rain8.com/&#34;&gt;雨枫轩&lt;/a&gt;。&lt;/p&gt;
@@ -325,10 +325,10 @@ import os
     
     <item>
       <title>用python写一个简单的web框架</title>
-      <link>https://bloodycoder.github.io/myblog/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</link>
+      <link>https://bloodycoder.github.io/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</link>
       <pubDate>Sat, 23 Jul 2016 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/myblog/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</guid>
+      <guid>https://bloodycoder.github.io/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</guid>
       <description>
 
 &lt;p&gt;最近在实验室也没什么事情做，闲着无聊。于是想着造轮子，最后决定写一个简单的web框架玩玩。&lt;/p&gt;
@@ -493,10 +493,10 @@ class Model(object):
     
     <item>
       <title>如何用python知道某人是不是在用电脑</title>
-      <link>https://bloodycoder.github.io/myblog/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</link>
+      <link>https://bloodycoder.github.io/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</link>
       <pubDate>Wed, 20 Jul 2016 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/myblog/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</guid>
+      <guid>https://bloodycoder.github.io/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</guid>
       <description>
 
 &lt;p&gt;最近一直待实验室，老板说一直都要来。大夏天的，来一趟大汗淋漓。来了老板也可能不在。所以我打算偷偷写一个脚本装到老板电脑里。
@@ -547,10 +547,10 @@ setup(windows=[&#39;hook.py&#39;])
     
     <item>
       <title>第一篇</title>
-      <link>https://bloodycoder.github.io/myblog/post/1/</link>
+      <link>https://bloodycoder.github.io/post/1/</link>
       <pubDate>Fri, 20 Feb 2015 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/myblog/post/1/</guid>
+      <guid>https://bloodycoder.github.io/post/1/</guid>
       <description>
 
 &lt;p&gt;You can write regular &lt;a href=&#34;http://markdowntutorial.com/&#34;&gt;markdown&lt;/a&gt; here and Jekyll will automatically convert it to a nice webpage.  I strongly encourage you to &lt;a href=&#34;http://markdowntutorial.com/&#34;&gt;take 5 minutes to learn how to write in markdown&lt;/a&gt; - it&amp;rsquo;ll teach you how to transform regular text into bold/italics/headings/tables/etc.&lt;/p&gt;
