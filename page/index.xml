@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Pages on Picard Xie</title>
-    <link>https://bloodycoder.github.io/page/</link>
+    <link>https://bloodycoder.github.io/myblog/page/</link>
     <description>Recent content in Pages on Picard Xie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <managingEditor>picardxie@foxmail.com (Picard)</managingEditor>
     <webMaster>picardxie@foxmail.com (Picard)</webMaster>
-    <atom:link href="https://bloodycoder.github.io/page/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://bloodycoder.github.io/myblog/page/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>About me</title>
-      <link>https://bloodycoder.github.io/page/about/</link>
+      <link>https://bloodycoder.github.io/myblog/page/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/page/about/</guid>
+      <guid>https://bloodycoder.github.io/myblog/page/about/</guid>
       <description>
 
 &lt;p&gt;因为大学不懂事，太浪了。&lt;/p&gt;

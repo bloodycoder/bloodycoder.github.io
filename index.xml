@@ -2,21 +2,180 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Picard Xie</title>
-    <link>https://bloodycoder.github.io/</link>
+    <link>https://bloodycoder.github.io/myblog/</link>
     <description>Recent content on Picard Xie</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <managingEditor>picardxie@foxmail.com (Picard)</managingEditor>
     <webMaster>picardxie@foxmail.com (Picard)</webMaster>
-    <lastBuildDate>Wed, 27 Jul 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://bloodycoder.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Aug 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://bloodycoder.github.io/myblog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>python爬虫入门(2):让你的github项目火起来</title>
+      <link>https://bloodycoder.github.io/myblog/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A82/</link>
+      <pubDate>Mon, 01 Aug 2016 00:00:00 +0000</pubDate>
+      <author>picardxie@foxmail.com (Picard)</author>
+      <guid>https://bloodycoder.github.io/myblog/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A82/</guid>
+      <description>
+
+&lt;p&gt;最近闲的比较无聊，于是想做一个自动star你的项目的爬虫玩玩。不然star数太低了，也比较难看。思路是准备注册成批的github帐号，然后挨个给你点star。&lt;/p&gt;
+
+&lt;h3 id=&#34;step-1-工具准备:fceb680951941983b1abdbc109a19fe2&#34;&gt;STEP.1 工具准备&lt;/h3&gt;
+
+&lt;p&gt;我用的是python 2.7.10，本次实验不需要下载依赖库，用自带的就行了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import urllib2,urllib,re,time
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;step-2-如何准备github帐号:fceb680951941983b1abdbc109a19fe2&#34;&gt;STEP.2 如何准备github帐号&lt;/h3&gt;
+
+&lt;p&gt;显然，我们要star的话， 帐号少说也得有个1000个吧。1000个帐号手动注册明显是不可能的，所以我们得写个小程序来注册帐号。&lt;/p&gt;
+
+&lt;p&gt;我们首先来调研一下github注册的过程。打开&lt;a href=&#34;https://github.com/join&#34;&gt;github-join&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;我们填入如下信息
+&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/1243070-f7c78efe659b0b34.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;用chrome开发者工具我们可以看到，数据以post的形式发给了这个链接&amp;rsquo;&lt;a href=&#34;https://github.com/join&#39;。&#34;&gt;https://github.com/join&#39;。&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/1243070-7441b2e446b6a8d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;唯一还不明白的数据就是这个&amp;rsquo;authenticity_token&amp;rsquo;。但如果我们打开网页的源码，会发现每一页都会有&amp;rsquo;authenticity_token&amp;rsquo;，有时还有好几个，而且还都不一样。那我们该发的是哪一个&amp;rsquo;authenticity_token&amp;rsquo;呢。&lt;/p&gt;
+
+&lt;p&gt;事实上，github每一个可供post的按钮都有token，你在post的时候，将离这个按钮最近的token发过去就行了。&lt;/p&gt;
+
+&lt;p&gt;知道了这一点后，我们就能开始写小程序了。&lt;/p&gt;
+
+&lt;h3 id=&#34;step-3-github-join的编写:fceb680951941983b1abdbc109a19fe2&#34;&gt;STEP.3 github_join的编写&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;class gitjoin:
+    def __init__(self):
+        cookies = urllib2.HTTPCookieProcessor() #构造cookies
+        self.opener = urllib2.build_opener(cookies)
+        self.opener.addheaders = [(&#39;User-agent&#39;, &#39;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36&#39;),(&#39;Origin&#39;,&#39;https://github.com&#39;
+                                    ),(&#39;Accept&#39;,&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&#39;),(&#39;Accept-Language&#39;,&#39;zh-CN,zh;q=0.8&#39;),
+                                  (&#39;Connection&#39;,&#39;keep-alive&#39;)] #请求头
+        self.re_auth = re.compile(&#39;authenticity_token[^&amp;gt;]+&#39;) #得到github token信息
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们用一个叫gitjoin的类来封装我们的注册机。这里我们的正则表达式只用了一次，只要匹配那个&amp;rsquo;token&amp;rsquo;就行了。&lt;/p&gt;
+
+&lt;p&gt;然后我们需要获得token。这个token就是用来注册的。代码如下。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    def view(self):
+        response = self.opener.open(&#39;https://github.com/join&#39;)
+        html = response.read()
+        print u&#39;正在登录join&#39;
+        print u&#39;状态码为&#39;,response.getcode()
+        token = self.re_auth.findall(html)[0][41:-3]
+        return token
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;获得了token之后，我们就可以开始注册了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    def zhuce(self,token,login,email,password):
+        self.formdata = {&#39;utf-8&#39;:&#39;✓&#39;,&#39;authenticity_token&#39;:token,&#39;user[login]&#39;:login,&#39;user[email]&#39;:email,&#39;user[password]&#39;:password,&#39;source&#39;:&#39;form-home&#39;}
+        data_encoded = urllib.urlencode(self.formdata)
+        print data_encoded
+        response = self.opener.open(&#39;https://github.com/join&#39;,data_encoded)
+        print u&#39;正在注册&#39;
+        print u&#39;状态码为&#39;,response.getcode(),u&#39;转到&#39;,response.geturl()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注册完了，就结束了吗?&lt;/p&gt;
+
+&lt;p&gt;很明显没这么简单，你注册完之后，你的cookies保存了你的用户信息，你这时是不能够继续注册的。你需要logout之后，才能注册。&lt;/p&gt;
+
+&lt;p&gt;这里logout我就不用chrome分析了。反正就是post一个数据给&lt;a href=&#34;url:&#34;&gt;https://github.com/logout&lt;/a&gt;，不过要记得加token(注意这里的token不是刚刚的注册token,我们需要重新获取它的logout token)。我直接上代码吧。&lt;/p&gt;
+
+&lt;p&gt;这是获取logout token&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    def view_index(self):
+        response = self.opener.open(&#39;https://github.com/&#39;)
+        html = response.read()
+        token = self.re_auth.findall(html)[0][41:-3]
+        return token
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是logout&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    def logout(self,token):
+        self.formdata = {&#39;utf-8&#39;:&#39;✓&#39;,&#39;authenticity_token&#39;:token}
+        data_encoded = urllib.urlencode(self.formdata)
+        response = self.opener.open(&#39;https://github.com/logout&#39;,data_encoded)
+        print u&#39;正在登出&#39;
+        print u&#39;状态码为&#39;,response.getcode(),u&#39;转到&#39;,response.geturl()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在gitjoin类就已经写好了，我们可以尝试注册一个账号了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;signin = gitjoin()
+token = signin.view()
+signin.zhuce(token,&amp;quot;pighasa100&amp;quot;,&amp;quot;pighasa100@qq.com&amp;quot;,&amp;quot;pighasa1&amp;quot;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;执行代码后，发现在&lt;a href=&#34;url:https://github.com&#34;&gt;github&lt;/a&gt;上也是能登录这个帐号的。说明我们成功了。下一步只需要批量生成帐号就行了。&lt;/p&gt;
+
+&lt;h3 id=&#34;step-4-登录和点star:fceb680951941983b1abdbc109a19fe2&#34;&gt;STEP.4 登录和点star&lt;/h3&gt;
+
+&lt;p&gt;然后关于登录和点star的问题。之前我在叙述如何注册的时候就说过了，这里我就简要概括了。你们可以自己用chrome或者火狐或者wireshark去分析，我这里就直接上代码了。
+这里是login&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+    def login(self,token,usr,password):
+        self.formdata = {&#39;commit&#39;:&#39;Sign in&#39;,&#39;utf-8&#39;:&#39;✓&#39;,&#39;authenticity_token&#39;:token,&#39;login&#39;:usr,&#39;password&#39;:password}
+        data_encoded = urllib.urlencode(self.formdata)
+        response = self.opener.open(&#39;https://github.com/session&#39;,data_encoded)
+        print u&#39;现在正在登陆&#39;,usr
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里是star&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+    def star(self,usrName,repoName):
+        url = &#39;&#39;.join([&#39;https://github.com/&#39;,usrName,&#39;/&#39;,repoName,&#39;/&#39;])
+        response = self.opener.open(url)
+        html = response.read()
+        token = self.re_auth.findall(html)[3][41:-3]
+        formdata = {&#39;utf-8&#39;:&#39;✓&#39;,&#39;authenticity_token&#39;:token}
+        data_encoded = urllib.urlencode(formdata)
+        response = self.opener.open(url+&#39;star&#39;,data_encoded)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;step-5-疯狂star:fceb680951941983b1abdbc109a19fe2&#34;&gt;STEP.5 疯狂star&lt;/h3&gt;
+
+&lt;p&gt;这一步还能干啥呢，该干的都干了，现在当然是疯狂的用刚刚注册好的帐号来点star。我们来看看效果。&lt;/p&gt;
+
+&lt;p&gt;这是我的github页面，很明显能看到一堆机器在点赞。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://upload-images.jianshu.io/upload_images/1243070-f5bd5f236ef35686.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;不过我也是很怕被注意到然后被封掉的，所以我设置的延时比较长，点了一次赞之后，要过6秒才能点下一次。&lt;/p&gt;
+
+&lt;p&gt;这个项目po在这里&lt;a href=&#34;https://github.com/bloodycoder/githack&#34;&gt;githack&lt;/a&gt;。
+我在** github.py **这个文件里写了一个*run*函数，你只需要调用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+run(&#39;你的id&#39;,&#39;你的仓库名&#39;,需要点赞的次数)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;就可以自动帮你点star了。&lt;/p&gt;
+
+&lt;p&gt;喜欢的点一波喜欢&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>python爬虫入门(1):爬万本书籍</title>
-      <link>https://bloodycoder.github.io/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</link>
+      <link>https://bloodycoder.github.io/myblog/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</link>
       <pubDate>Wed, 27 Jul 2016 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</guid>
+      <guid>https://bloodycoder.github.io/myblog/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/</guid>
       <description>
 
 &lt;p&gt;最近闲的无聊，想爬点书看看。 于是我选择了这个网站&lt;a href=&#34;http://www.rain8.com/&#34;&gt;雨枫轩&lt;/a&gt;。&lt;/p&gt;
@@ -166,10 +325,10 @@ import os
     
     <item>
       <title>用python写一个简单的web框架</title>
-      <link>https://bloodycoder.github.io/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</link>
+      <link>https://bloodycoder.github.io/myblog/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</link>
       <pubDate>Sat, 23 Jul 2016 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</guid>
+      <guid>https://bloodycoder.github.io/myblog/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</guid>
       <description>
 
 &lt;p&gt;最近在实验室也没什么事情做，闲着无聊。于是想着造轮子，最后决定写一个简单的web框架玩玩。&lt;/p&gt;
@@ -334,10 +493,10 @@ class Model(object):
     
     <item>
       <title>如何用python知道某人是不是在用电脑</title>
-      <link>https://bloodycoder.github.io/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</link>
+      <link>https://bloodycoder.github.io/myblog/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</link>
       <pubDate>Wed, 20 Jul 2016 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</guid>
+      <guid>https://bloodycoder.github.io/myblog/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</guid>
       <description>
 
 &lt;p&gt;最近一直待实验室，老板说一直都要来。大夏天的，来一趟大汗淋漓。来了老板也可能不在。所以我打算偷偷写一个脚本装到老板电脑里。
@@ -388,10 +547,10 @@ setup(windows=[&#39;hook.py&#39;])
     
     <item>
       <title>第一篇</title>
-      <link>https://bloodycoder.github.io/post/1/</link>
+      <link>https://bloodycoder.github.io/myblog/post/1/</link>
       <pubDate>Fri, 20 Feb 2015 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/post/1/</guid>
+      <guid>https://bloodycoder.github.io/myblog/post/1/</guid>
       <description>
 
 &lt;p&gt;You can write regular &lt;a href=&#34;http://markdowntutorial.com/&#34;&gt;markdown&lt;/a&gt; here and Jekyll will automatically convert it to a nice webpage.  I strongly encourage you to &lt;a href=&#34;http://markdowntutorial.com/&#34;&gt;take 5 minutes to learn how to write in markdown&lt;/a&gt; - it&amp;rsquo;ll teach you how to transform regular text into bold/italics/headings/tables/etc.&lt;/p&gt;
@@ -460,10 +619,10 @@ foo(3)
     
     <item>
       <title>About me</title>
-      <link>https://bloodycoder.github.io/page/about/</link>
+      <link>https://bloodycoder.github.io/myblog/page/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <author>picardxie@foxmail.com (Picard)</author>
-      <guid>https://bloodycoder.github.io/page/about/</guid>
+      <guid>https://bloodycoder.github.io/myblog/page/about/</guid>
       <description>
 
 &lt;p&gt;因为大学不懂事，太浪了。&lt;/p&gt;

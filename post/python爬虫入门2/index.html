@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>python爬虫入门(2):让你的github项目火起来</title>
+
+  <meta name="author" content="Picard" />
+  
+  
+
+  <meta name="generator" content="Hugo 0.15" />
+
+  <link rel="alternate" href="https://bloodycoder.github.io/myblog/index.xml" type="application/rss+xml" title="Picard Xie">
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://bloodycoder.github.io/myblog/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://bloodycoder.github.io/myblog/css/main.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://bloodycoder.github.io/myblog/css/pygment_highlights.css" />
+  
+  
+  <meta property="og:title" content="python爬虫入门(2):让你的github项目火起来" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/" />
+  <meta property="og:image" content="img/avatar-icon.png" />
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://bloodycoder.github.io/myblog/">Picard Xie</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+          <li>
+          <a title="Blog" href="/myblog/">Blog</a>
+  	      </li>
+  	    
+      
+        
+          <li>
+          <a title="About" href="/myblog/page/about/">About</a>
+  	      </li>
+  	    
+      
+      </ul>
+    </div>
+
+	<div class="avatar-container">
+	  <div class="avatar-img-border">
+      
+          <a title="Picard Xie" href="https://bloodycoder.github.io/myblog/">
+              <img class="avatar-img" src="https://bloodycoder.github.io/myblog/img/avatar-icon.png" alt="Picard Xie" />
+          </a>
+      
+	  </div>
+	</div>
+
+  </div>
+</nav>
+
+
+    <div role="main" class="container main-content">
+
+      
+        
+
+
+
+
+
+<header class="header-section ">
+
+<div class="intro-header no-img">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-heading">
+          <h1>python爬虫入门(2):让你的github项目火起来</h1>
+      
+      
+      
+      <span class="post-meta">Posted on August 1, 2016</span>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+          
+
+<p>最近闲的比较无聊，于是想做一个自动star你的项目的爬虫玩玩。不然star数太低了，也比较难看。思路是准备注册成批的github帐号，然后挨个给你点star。</p>
+
+<h3 id="step-1-工具准备:fceb680951941983b1abdbc109a19fe2">STEP.1 工具准备</h3>
+
+<p>我用的是python 2.7.10，本次实验不需要下载依赖库，用自带的就行了。</p>
+
+<pre><code>import urllib2,urllib,re,time
+</code></pre>
+
+<h3 id="step-2-如何准备github帐号:fceb680951941983b1abdbc109a19fe2">STEP.2 如何准备github帐号</h3>
+
+<p>显然，我们要star的话， 帐号少说也得有个1000个吧。1000个帐号手动注册明显是不可能的，所以我们得写个小程序来注册帐号。</p>
+
+<p>我们首先来调研一下github注册的过程。打开<a href="https://github.com/join">github-join</a></p>
+
+<p>我们填入如下信息
+<img src="http://upload-images.jianshu.io/upload_images/1243070-f7c78efe659b0b34.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<p>用chrome开发者工具我们可以看到，数据以post的形式发给了这个链接&rsquo;<a href="https://github.com/join'。">https://github.com/join'。</a></p>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/1243070-7441b2e446b6a8d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<p>唯一还不明白的数据就是这个&rsquo;authenticity_token&rsquo;。但如果我们打开网页的源码，会发现每一页都会有&rsquo;authenticity_token&rsquo;，有时还有好几个，而且还都不一样。那我们该发的是哪一个&rsquo;authenticity_token&rsquo;呢。</p>
+
+<p>事实上，github每一个可供post的按钮都有token，你在post的时候，将离这个按钮最近的token发过去就行了。</p>
+
+<p>知道了这一点后，我们就能开始写小程序了。</p>
+
+<h3 id="step-3-github-join的编写:fceb680951941983b1abdbc109a19fe2">STEP.3 github_join的编写</h3>
+
+<pre><code>class gitjoin:
+    def __init__(self):
+        cookies = urllib2.HTTPCookieProcessor() #构造cookies
+        self.opener = urllib2.build_opener(cookies)
+        self.opener.addheaders = [('User-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'),('Origin','https://github.com'
+                                    ),('Accept','text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'),('Accept-Language','zh-CN,zh;q=0.8'),
+                                  ('Connection','keep-alive')] #请求头
+        self.re_auth = re.compile('authenticity_token[^&gt;]+') #得到github token信息
+</code></pre>
+
+<p>我们用一个叫gitjoin的类来封装我们的注册机。这里我们的正则表达式只用了一次，只要匹配那个&rsquo;token&rsquo;就行了。</p>
+
+<p>然后我们需要获得token。这个token就是用来注册的。代码如下。</p>
+
+<pre><code>    def view(self):
+        response = self.opener.open('https://github.com/join')
+        html = response.read()
+        print u'正在登录join'
+        print u'状态码为',response.getcode()
+        token = self.re_auth.findall(html)[0][41:-3]
+        return token
+</code></pre>
+
+<p>获得了token之后，我们就可以开始注册了。</p>
+
+<pre><code>    def zhuce(self,token,login,email,password):
+        self.formdata = {'utf-8':'✓','authenticity_token':token,'user[login]':login,'user[email]':email,'user[password]':password,'source':'form-home'}
+        data_encoded = urllib.urlencode(self.formdata)
+        print data_encoded
+        response = self.opener.open('https://github.com/join',data_encoded)
+        print u'正在注册'
+        print u'状态码为',response.getcode(),u'转到',response.geturl()
+</code></pre>
+
+<p>注册完了，就结束了吗?</p>
+
+<p>很明显没这么简单，你注册完之后，你的cookies保存了你的用户信息，你这时是不能够继续注册的。你需要logout之后，才能注册。</p>
+
+<p>这里logout我就不用chrome分析了。反正就是post一个数据给<a href="url:">https://github.com/logout</a>，不过要记得加token(注意这里的token不是刚刚的注册token,我们需要重新获取它的logout token)。我直接上代码吧。</p>
+
+<p>这是获取logout token</p>
+
+<pre><code>    def view_index(self):
+        response = self.opener.open('https://github.com/')
+        html = response.read()
+        token = self.re_auth.findall(html)[0][41:-3]
+        return token
+</code></pre>
+
+<p>这是logout</p>
+
+<pre><code>    def logout(self,token):
+        self.formdata = {'utf-8':'✓','authenticity_token':token}
+        data_encoded = urllib.urlencode(self.formdata)
+        response = self.opener.open('https://github.com/logout',data_encoded)
+        print u'正在登出'
+        print u'状态码为',response.getcode(),u'转到',response.geturl()
+</code></pre>
+
+<p>现在gitjoin类就已经写好了，我们可以尝试注册一个账号了。</p>
+
+<pre><code>signin = gitjoin()
+token = signin.view()
+signin.zhuce(token,&quot;pighasa100&quot;,&quot;pighasa100@qq.com&quot;,&quot;pighasa1&quot;)
+
+</code></pre>
+
+<p>执行代码后，发现在<a href="url:https://github.com">github</a>上也是能登录这个帐号的。说明我们成功了。下一步只需要批量生成帐号就行了。</p>
+
+<h3 id="step-4-登录和点star:fceb680951941983b1abdbc109a19fe2">STEP.4 登录和点star</h3>
+
+<p>然后关于登录和点star的问题。之前我在叙述如何注册的时候就说过了，这里我就简要概括了。你们可以自己用chrome或者火狐或者wireshark去分析，我这里就直接上代码了。
+这里是login</p>
+
+<pre><code>
+    def login(self,token,usr,password):
+        self.formdata = {'commit':'Sign in','utf-8':'✓','authenticity_token':token,'login':usr,'password':password}
+        data_encoded = urllib.urlencode(self.formdata)
+        response = self.opener.open('https://github.com/session',data_encoded)
+        print u'现在正在登陆',usr
+
+</code></pre>
+
+<p>这里是star</p>
+
+<pre><code>
+    def star(self,usrName,repoName):
+        url = ''.join(['https://github.com/',usrName,'/',repoName,'/'])
+        response = self.opener.open(url)
+        html = response.read()
+        token = self.re_auth.findall(html)[3][41:-3]
+        formdata = {'utf-8':'✓','authenticity_token':token}
+        data_encoded = urllib.urlencode(formdata)
+        response = self.opener.open(url+'star',data_encoded)
+
+</code></pre>
+
+<h3 id="step-5-疯狂star:fceb680951941983b1abdbc109a19fe2">STEP.5 疯狂star</h3>
+
+<p>这一步还能干啥呢，该干的都干了，现在当然是疯狂的用刚刚注册好的帐号来点star。我们来看看效果。</p>
+
+<p>这是我的github页面，很明显能看到一堆机器在点赞。</p>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/1243070-f5bd5f236ef35686.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<p>不过我也是很怕被注意到然后被封掉的，所以我设置的延时比较长，点了一次赞之后，要过6秒才能点下一次。</p>
+
+<p>这个项目po在这里<a href="https://github.com/bloodycoder/githack">githack</a>。
+我在** github.py **这个文件里写了一个*run*函数，你只需要调用</p>
+
+<pre><code>
+run('你的id','你的仓库名',需要点赞的次数)
+
+</code></pre>
+
+<p>就可以自动帮你点star了。</p>
+
+<p>喜欢的点一波喜欢</p>
+
+      </article>
+
+      <ul class="pager blog-pager">
+        
+        <li class="previous">
+          <a href="https://bloodycoder.github.io/myblog/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A81%E7%88%AC%E4%B8%87%E6%9C%AC%E4%B9%A6%E7%B1%8D/" data-toggle="tooltip" data-placement="top" title="python爬虫入门(1):爬万本书籍">&larr; Previous Post</a>
+        </li>
+        
+        
+      </ul>
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+
+    </div>
+
+    <footer>
+  <div class="container beautiful-jekyll-footer">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          <li>
+            <a href="https://www.facebook.com/100007987334485" title="Facebook">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://github.com/bloodycoder" title="GitHub">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+		      
+		      
+          <li>
+            <a href="mailto:picardxie@foxmail.com" title="Email me">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+		      
+          <li>
+            <a href="http://weibo.com/u/3448771750" title="weibo">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+	    	  
+          
+          
+          <li>
+            <a href="https://wikipedia.org/wiki/User:" title="Wikipedia">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-qq fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+
+    		  <li>
+      			<a href="https://bloodycoder.github.io/myblog/index.xml" title="RSS">
+      			  <span class="fa-stack fa-lg">
+        				<i class="fa fa-circle fa-stack-2x"></i>
+        				<i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      			  </span>
+      			</a>
+    		  </li>		
+
+        </ul>
+        <p class="copyright text-muted">
+    		  Picard
+    		  &nbsp;&bull;&nbsp;
+          2016
+    		  
+    		  &nbsp;&bull;&nbsp;
+    		  <a href="https://bloodycoder.github.io/myblog/">Picard Xie</a>
+    		  
+  	    </p>
+  	        
+    		<p class="theme-by text-muted">
+    		  Theme by
+    		  <a href="http://deanattali.com/beautiful-jekyll/">bj</a>
+    		</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://bloodycoder.github.io/myblog/js/jquery-1.11.2.min.js"></script>
+<script src="https://bloodycoder.github.io/myblog/js/bootstrap.min.js"></script>
+<script src="https://bloodycoder.github.io/myblog/js/main.js"></script>
+
+
+
+  </body>
+</html>
