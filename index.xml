@@ -8,8 +8,22 @@
     <language>en-us</language>
     <managingEditor>picardxie@foxmail.com (Picard)</managingEditor>
     <webMaster>picardxie@foxmail.com (Picard)</webMaster>
-    <lastBuildDate>Mon, 01 Aug 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 06 Dec 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://bloodycoder.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>某家日企公司二面</title>
+      <link>https://bloodycoder.github.io/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</link>
+      <pubDate>Tue, 06 Dec 2016 00:00:00 +0000</pubDate>
+      <author>picardxie@foxmail.com (Picard)</author>
+      <guid>https://bloodycoder.github.io/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</guid>
+      <description>&lt;p&gt;今天去xx二面，面试官是总监。然后跟我聊什么我们学院多少系，系里多少人，多少人选择考研，多少人出国blahblah&amp;hellip;.（你真的不是来做调研的么）。然后调研到我上了哪些课，有哪些擅长的。我果断说了最擅长数据结构，四年唯一满绩的课。然后他说那我们来做道题测试一下。然后他出了一道最简单的最短路径，然后我就把dijkstra算法的原理解释了一遍。然后又问了一道关于面向对象的问题，他光解释题目意思就花了5分钟。结果我答不上来，然后他一步步提醒，我还是不知道。当时觉得为什么这么尴尬，10分钟一直努力地在想也不知道。还好面试官还是原谅了我的愚钝。然后面试官介绍了一下公司前景，和未来发展。他告诉我他当时有7个offer，包括微软的，，最后还是来了这家公司。&lt;/p&gt;
+
+&lt;p&gt;然后总监请我去吃了一顿饭，然后口头承诺了一下期权什么的。我只能说，还可以吧。这家公司真正吸引我的还是躺着赚钱的机制，写一个爬虫一劳永逸，年年赚钱，还有比这更爽的么？&lt;/p&gt;
+
+&lt;p&gt;然后讨论了一下薪资什么的，我说我最差的同学是12k，最好的有18k。并没有直接表达我的期望。然后因为这家面试太久了，导致我下午的面试直接鸽了。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>python爬虫入门(2):让你的github项目火起来</title>
