@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Effective C&#43;&#43; on 艺</title>
+    <link>https://bloodycoder.github.io/tags/effective-c&#43;&#43;/</link>
+    <description>Recent content in Effective C&#43;&#43; on 艺</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 27 Apr 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://bloodycoder.github.io/tags/effective-c++/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>effective c&#43;&#43; 读书笔记01</title>
+      <link>https://bloodycoder.github.io/post/effective-c&#43;&#43;_note1/</link>
+      <pubDate>Thu, 27 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://bloodycoder.github.io/post/effective-c&#43;&#43;_note1/</guid>
+      <description>初始化 ABEntry():a(a1),b(b1),c(c1){} ABEntry(){a=a1;b=b1;c=c1;} 以前一直以为这俩种方式是一样得。现在才知道因为C++构造函数，默认会帮你初始化。所以这俩种并不一样。后者两次赋值，前者只赋值了一次</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -21,21 +21,21 @@
     </item>
     
     <item>
+      <title>effective c&#43;&#43; 读书笔记01</title>
+      <link>https://bloodycoder.github.io/post/effective-c&#43;&#43;_note1/</link>
+      <pubDate>Thu, 27 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://bloodycoder.github.io/post/effective-c&#43;&#43;_note1/</guid>
+      <description>初始化 ABEntry():a(a1),b(b1),c(c1){} ABEntry(){a=a1;b=b1;c=c1;} 以前一直以为这俩种方式是一样得。现在才知道因为C++构造函数，默认会帮你初始化。所以这俩种并不一样。后者两次赋值，前者只赋值了一次</description>
+    </item>
+    
+    <item>
       <title>某家日企公司二面</title>
       <link>https://bloodycoder.github.io/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</link>
       <pubDate>Tue, 06 Dec 2016 00:00:00 +0000</pubDate>
       
       <guid>https://bloodycoder.github.io/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</guid>
       <description>今天去xx二面，面试官是总监。然后跟我聊什么我们学院多少系，系里多少人，多少人选择考研，多少人出国blahblah&amp;hellip;.（你真的</description>
-    </item>
-    
-    <item>
-      <title>effective cpp</title>
-      <link>https://bloodycoder.github.io/post/eff/effective-c&#43;&#43;_note1/</link>
-      <pubDate>Sat, 23 Jul 2016 00:00:00 +0000</pubDate>
-      
-      <guid>https://bloodycoder.github.io/post/eff/effective-c&#43;&#43;_note1/</guid>
-      <description>4.27读书笔记 初始化 ABEntry():a(a1),b(b1),c(c1){} ABEntry(){a=a1;b=b1;c=c1;} 以前一直以为这俩种方式是一样得。现在才知道因为C++构造函数，默认会帮你初始化。所以这俩种并不一样。后者两次赋值，</description>
     </item>
     
     <item>
