@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>python爬虫入门(1):爬万本书籍</title>
+
+  <meta name="author" content="Picard" />
+  
+  
+
+  <meta name="generator" content="Hugo 0.15" />
+
+  <link rel="alternate" href="https://bloodycoder.github.io/index.xml" type="application/rss+xml" title="Picard Xie">
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://bloodycoder.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://bloodycoder.github.io/css/main.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://bloodycoder.github.io/css/pygment_highlights.css" />
+  
+  
+  <meta property="og:title" content="python爬虫入门(1):爬万本书籍" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/" />
+  <meta property="og:image" content="img/avatar-icon.png" />
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://bloodycoder.github.io/">Picard Xie</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+          <li>
+          <a title="Blog" href="/">Blog</a>
+  	      </li>
+  	    
+      
+        
+          <li>
+          <a title="About" href="/page/about/">About</a>
+  	      </li>
+  	    
+      
+      </ul>
+    </div>
+
+	<div class="avatar-container">
+	  <div class="avatar-img-border">
+      
+          <a title="Picard Xie" href="https://bloodycoder.github.io/">
+              <img class="avatar-img" src="https://bloodycoder.github.io/img/avatar-icon.png" alt="Picard Xie" />
+          </a>
+      
+	  </div>
+	</div>
+
+  </div>
+</nav>
+
+
+    <div role="main" class="container main-content">
+
+      
+        
+
+
+
+
+
+<header class="header-section ">
+
+<div class="intro-header no-img">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-heading">
+          <h1>python爬虫入门(1):爬万本书籍</h1>
+      
+      
+      
+      <span class="post-meta">Posted on July 27, 2016</span>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</header>
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+          
+
+<p>最近闲的无聊，想爬点书看看。 于是我选择了这个网站<a href="http://www.rain8.com/">雨枫轩</a>。</p>
+
+<h2 id="step1-分析网站:4a2cb072312e8dcd59deb51f41fcdd50">STEP1.分析网站</h2>
+
+<hr />
+
+<p>一开始我想通过一篇文章引用的链接，将书爬完，后来发现并不需要这样做。比如我们可以打开<a href="http://txt.rain8.com/txtzx/list_93_1.html">人生哲学</a>这个栏目。
+<img src="http://upload-images.jianshu.io/upload_images/1243070-95e3c372c68e31ab.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" />
+如图1所示，会把页面数全列出来。
+并且这个url</p>
+
+<pre><code>http://txt.rain8.com/txtzx/list_93_1.html
+</code></pre>
+
+<p>也非常的有规律。
+可以看出是由</p>
+
+<pre><code>'http://txt.rain8.com/txt'+'栏目名称'+'list_栏目编号_页数.html'
+</code></pre>
+
+<p>组成的。
+知道了这点后，我们就能轻松的把网站爬完了。</p>
+
+<h2 id="step2-初始化:4a2cb072312e8dcd59deb51f41fcdd50">STEP2.初始化</h2>
+
+<p>首先我们来理清思路。</p>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/1243070-79a5feabdfb29a02.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<p>这是我们需要的库</p>
+
+<pre><code>import requests
+import re
+import os
+</code></pre>
+
+<p>其实这个项目用urllib2也能完成。
+我们首先来初始化,在self.urls里，我们定义一些需要fetch的栏目。(比如言情，恐怖仙侠之类的书就可以跳过)。然后写一些正则表达式，供其他的method使用。</p>
+
+<pre><code>class fetchBook:
+    def __init__(self):
+        self.header = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
+        self.urls = [
+                     'http://txt.rain8.com/txtgw/',
+                     'http://txt.rain8.com/txtzj/',
+                     'http://txt.rain8.com/txtzx/',
+                     'http://txt.rain8.com/txtsh/'
+                     ]
+        self.rePageIndex = re.compile('list_\d+_\d+.html')#得到栏目编号
+        self.rePageCount = re.compile('&lt;strong&gt;\d+&lt;/strong&gt;')#得到页面数目
+        self.reDownloadGet1 = re.compile('href=.http://txt.rain8.com/plus/xiazai_yfx.php?[^&gt;]+')#得到下载链接
+        self.reGetTitle = re.compile('&lt;title&gt;.+&lt;/title&gt;')#得到标题
+        self.reGetAuthor = re.compile(&quot;&lt;/small&gt;&lt;span&gt;[^&gt;]+&quot;)#得到作者名称
+        self.reBookGetNew = re.compile('')#得到书籍链接
+        self.reBookGetOld = re.compile('')
+        self.cnt = 0
+</code></pre>
+
+<h2 id="step3-获取所有的页面:4a2cb072312e8dcd59deb51f41fcdd50">STEP3.获取所有的页面</h2>
+
+<p>我们可以查看<a href="http://txt.rain8.com/txtzx/list_93_1.html">人生哲学</a>源代码。可以找到总共的页数。
+<img src="http://upload-images.jianshu.io/upload_images/1243070-32d73f21cacdfa75.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" />
+然后我们就能得到每一页的数据。
+代码如下</p>
+
+<pre><code>    def viewAllPage(self,url):
+        &quot;&quot;&quot;
+        函数功能为把该栏目下所有页面全过一遍。
+        &quot;&quot;&quot;
+        req = requests.get(url,headers = self.header)
+        pageIndex = self.rePageIndex.findall(req.text)[0][5:7]
+        pageCount = int(self.rePageCount.findall(req.text)[0][8:-9])
+        urlToFetch = [url,'list_',pageIndex,'_','1','.html']
+        foldname = self.reGetTitle.findall(req.text)[0][7:]
+        foldname = foldname.encode('unicode_escape').decode('string_escape')
+        foldname = foldname.split('|')[0]
+        self.createDir(foldname)
+        for page in range(1,pageCount+1):
+            urlToFetch[4] = str(page)
+            url_to_get = ''.join(urlToFetch)#得到所有页面的url
+</code></pre>
+
+<h2 id="step4-得到下载链接:4a2cb072312e8dcd59deb51f41fcdd50">STEP4.得到下载链接</h2>
+
+<p>然后我们用上面写好的正则表达式，来匹配她的下载链接。</p>
+
+<pre><code>    def fetchDownloadUrl(self,bookurl):
+        req = requests.get(bookurl,headers = self.header)
+        result = self.reDownloadGet1.findall(req.text)
+        result = result[0][6:-17]
+        authorname = self.reGetAuthor.findall(req.text)[0][14:-6].encode('unicode_escape').decode('string_escape')
+        req = requests.get(result,headers = self.header)
+        bookname = self.reGetTitle.findall(req.text)[0][7:-24]
+        downloadurl = self.reDownloadGet1.findall(req.text)[0][6:-17]
+        return downloadurl,bookname,authorname
+</code></pre>
+
+<h2 id="step5-下载:4a2cb072312e8dcd59deb51f41fcdd50">STEP5.下载</h2>
+
+<p>下载的时候，由于该网站下载的书都是rar格式的。所以我们只要用二进制的方式写就可以了。
+我们调用</p>
+
+<pre><code>self.req = requests.get(downloadUrl,headers = self.header)
+</code></pre>
+
+<p>然后</p>
+
+<pre><code>f = open(posi+'/'+bookname+'.rar','wb')
+</code></pre>
+
+<p>就可以写进去了。</p>
+
+<h2 id="step6-编码问题:4a2cb072312e8dcd59deb51f41fcdd50">STEP6.编码问题</h2>
+
+<p>之前一直被python的编码问题搞的头大，这次又遇见了。于是找了点资料看了看。
+因为python工作使用的编码是unicode，如果要在编码间进行转化，推荐要先decode成unicode，然后再encode成别的编码。
+然后我在爬内容的过程中碰到了这个问题：</p>
+
+<pre><code>s = u'\xb9\xc5\xca\xab\xb4\xca\xc3\xfb\xd6\xf8'
+</code></pre>
+
+<p>\xb9这样的很明显应该是gbk编码。而python却在字符串前加了个u。然后我对这串字符encode还是decode都会报错。或者打印出来乱码。
+经过查阅资料，我找到了一种解决办法</p>
+
+<pre><code>s.encode('unicode_escape').decode('string_escape')
+</code></pre>
+
+<p>经过这样处理后</p>
+
+<pre><code>&gt;&gt;&gt; print repr(s)
+&gt;&gt;&gt; '\xb9\xc5\xca\xab\xb4\xca\xc3\xfb\xd6\xf8'
+</code></pre>
+
+<p>很明显就恢复了正常。这时我们只要decode(&lsquo;gb2312&rsquo;)就能转换成unicode编码了。
+##STEP7.结果展示</p>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/1243070-376983cb0ca40b4e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/1243070-b00eca99a86efcc7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" /></p>
+
+<p><a href="https://github.com/bloodycoder/craw_books">github地址</a>
+喜欢的可以点一下喜欢。</p>
+
+      </article>
+
+      <ul class="pager blog-pager">
+        
+        <li class="previous">
+          <a href="https://bloodycoder.github.io/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/" data-toggle="tooltip" data-placement="top" title="用python写一个简单的web框架">&larr; Previous Post</a>
+        </li>
+        
+        
+        <li class="next">
+          <a href="https://bloodycoder.github.io/post/python%E7%88%AC%E8%99%AB%E5%85%A5%E9%97%A82/" data-toggle="tooltip" data-placement="top" title="python爬虫入门(2):让你的github项目火起来">Next Post &rarr;</a>
+        </li>
+        
+      </ul>
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+
+    </div>
+
+    <footer>
+  <div class="container beautiful-jekyll-footer">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          <li>
+            <a href="https://www.facebook.com/100007987334485" title="Facebook">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://github.com/bloodycoder" title="GitHub">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+		      
+		      
+          <li>
+            <a href="mailto:picardxie@foxmail.com" title="Email me">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+		      
+          <li>
+            <a href="http://weibo.com/u/3448771750" title="weibo">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+	    	  
+          
+          
+          <li>
+            <a href="https://wikipedia.org/wiki/User:" title="Wikipedia">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-qq fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+
+    		  <li>
+      			<a href="https://bloodycoder.github.io/index.xml" title="RSS">
+      			  <span class="fa-stack fa-lg">
+        				<i class="fa fa-circle fa-stack-2x"></i>
+        				<i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      			  </span>
+      			</a>
+    		  </li>		
+
+        </ul>
+        <p class="copyright text-muted">
+    		  Picard
+    		  &nbsp;&bull;&nbsp;
+          2016
+    		  
+    		  &nbsp;&bull;&nbsp;
+    		  <a href="https://bloodycoder.github.io/">Picard Xie</a>
+    		  
+  	    </p>
+  	        
+    		<p class="theme-by text-muted">
+    		  Theme by
+    		  <a href="http://deanattali.com/beautiful-jekyll/">bj</a>
+    		</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://bloodycoder.github.io/js/jquery-1.11.2.min.js"></script>
+<script src="https://bloodycoder.github.io/js/bootstrap.min.js"></script>
+<script src="https://bloodycoder.github.io/js/main.js"></script>
+
+
+
+  </body>
+</html>
