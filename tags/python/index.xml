@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>effective cpp</title>
+      <link>https://bloodycoder.github.io/post/eff/effective-c&#43;&#43;_note1/</link>
+      <pubDate>Sat, 23 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>https://bloodycoder.github.io/post/eff/effective-c&#43;&#43;_note1/</guid>
+      <description>4.27读书笔记 初始化 ABEntry():a(a1),b(b1),c(c1){} ABEntry(){a=a1;b=b1;c=c1;} 以前一直以为这俩种方式是一样得。现在才知道因为C++构造函数，默认会帮你初始化。所以这俩种并不一样。后者两次赋值，</description>
+    </item>
+    
+    <item>
       <title>用python写一个简单的web框架</title>
       <link>https://bloodycoder.github.io/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</link>
       <pubDate>Sat, 23 Jul 2016 00:00:00 +0000</pubDate>

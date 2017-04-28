@@ -1,0 +1,146 @@
+    <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="stream of consciousness">
+		<meta name="description" content="Blog Description">
+		<meta name="generator" content="Hugo 0.21-DEV" />
+		<title>effective cpp &middot; 艺</title>
+		<link rel="shortcut icon" href="https://bloodycoder.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://bloodycoder.github.io/css/style.css">
+		<link rel="stylesheet" href="https://bloodycoder.github.io/css/highlight.css">
+		
+
+		
+		<link rel="stylesheet" href="https://bloodycoder.github.io/css/font-awesome.min.css">
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='https://bloodycoder.github.io/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='https://bloodycoder.github.io/post'>Archive</a>
+	<a href='https://bloodycoder.github.io/tags'>Tags</a>
+	<a href='https://bloodycoder.github.io/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        effective cpp
+                    </h1>
+                    <h2 class="headline">
+                    Jul 23, 2016 00:00
+                    · 377 words
+                    · 1 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://bloodycoder.github.io/tags/python">python</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<h4 id="4-27读书笔记">4.27读书笔记</h4>
+
+<h3 id="初始化">初始化</h3>
+
+<pre><code>ABEntry():a(a1),b(b1),c(c1){}
+ABEntry(){a=a1;b=b1;c=c1;}
+</code></pre>
+
+<p>以前一直以为这俩种方式是一样得。现在才知道因为C++构造函数，默认会帮你初始化。所以这俩种并不一样。后者两次赋值，前者只赋值了一次，所以前者效率要高。
+但有的情况只能用前者，所以记住用前者就行。</p>
+
+<h3 id="local-static和non-local-static">local static和non-local static</h3>
+
+<p><a href="https://github.com/bloodycoder/bookCollection/blob/master/notes/elements/static.md">static的定义</a></p>
+
+<p>如果有多个文件引用一个<code>non-local static</code>的实例，有可能这个实例还没被初始化，导致出现问题。但如果把这个实例放到方法里，然后返回这个实例，就能保证他初始化了。</p>
+
+<h3 id="虚析构函数">虚析构函数</h3>
+
+<p><a href="https://github.com/bloodycoder/bookCollection/blob/master/notes/elements/%E8%99%9A%E5%87%BD%E6%95%B0.md">定义</a></p>
+
+<h3 id="operator">operator=</h3>
+
+<p>一般在重载=的时候，前面会有<code>&amp;</code>符号。这是因为，在赋值的时候，比如<code>x=y</code>，这个表达式会返回x这个对象。所以你才能写出诸如<code>x=y=z</code>之类的语句。如果你不这样做，
+那么你重载出来，就不能满足这些特性。那么你用的时候就可能出错。</p>
+
+<p>这也是重载=和复制构造函数的区别。</p>
+
+<h3 id="python-gc机制">python GC机制</h3>
+
+<p>看c++智能指针的时候，书里提到这个跟GC相似。于是看了下。</p>
+
+<p><a href="https://github.com/bloodycoder/bookCollection/blob/master/notes/elements/pythonGC%E6%9C%BA%E5%88%B6.md">定义</a></p>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/bloodycoder">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2017 <i class="fa fa-heart" aria-hidden="true"></i> stream of consciousness
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="https://bloodycoder.github.io/js/jquery-2.2.4.min.js"></script>
+<script src="https://bloodycoder.github.io/js/main.js"></script>
+<script src="https://bloodycoder.github.io/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+    </body>
+</html>
