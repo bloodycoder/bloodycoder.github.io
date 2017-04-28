@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Blog Title</title>
+    <link>http://nodejh.com/tags/python/</link>
+    <description>Recent content in Python on Blog Title</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 23 Jul 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://nodejh.com/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>用python写一个简单的web框架</title>
+      <link>http://nodejh.com/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</link>
+      <pubDate>Sat, 23 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://nodejh.com/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</guid>
+      <description>最近在实验室也没什么事情做，闲着无聊。于是想着造轮子，最后决定写一个简单的web框架玩玩。 STEP.1 我们首先得选择基于什么协议来写这种框架。我们可以</description>
+    </item>
+    
+  </channel>
+</rss>

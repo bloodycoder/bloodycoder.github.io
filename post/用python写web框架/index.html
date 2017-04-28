@@ -1,0 +1,278 @@
+    <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Hugo">
+		<meta name="description" content="Blog Description">
+		<meta name="generator" content="Hugo 0.21-DEV" />
+		<title>用python写一个简单的web框架 &middot; Blog Title</title>
+		<link rel="shortcut icon" href="http://nodejh.com/images/favicon.ico">
+		<link rel="stylesheet" href="http://nodejh.com/css/style.css">
+		<link rel="stylesheet" href="http://nodejh.com/css/highlight.css">
+		
+
+		
+		<link rel="stylesheet" href="http://nodejh.com/css/font-awesome.min.css">
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='http://nodejh.com/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='http://nodejh.com/post'>Archive</a>
+	<a href='http://nodejh.com/tags'>Tags</a>
+	<a href='http://nodejh.com/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        用python写一个简单的web框架
+                    </h1>
+                    <h2 class="headline">
+                    Jul 23, 2016 00:00
+                    · 1285 words
+                    · 3 minutes read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="http://nodejh.com/tags/python">python</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p>最近在实验室也没什么事情做，闲着无聊。于是想着造轮子，最后决定写一个简单的web框架玩玩。</p>
+
+<h2 id="step-1">STEP.1</h2>
+
+<hr />
+
+<p>我们首先得选择基于什么协议来写这种框架。我们可以选择CGI协议,或者是WSGI接口。如果使用CGI,实际上我们只是按着CGI的规范写了一个python程序，然后每次服务器收到请求,就fork一个程序来执行它，然后返回一个http文档，性能比较低下。对于WSGI，而是一个存在于服务器和应用间的接口，在WSGI之前，web应用都是依赖于服务器的，现在流行的python框架都支持WSGI接口。</p>
+
+<h2 id="step-2-pep-333">STEP.2 PEP-333</h2>
+
+<hr />
+
+<p>这一段是PEP-333 所提供的样例代码。</p>
+
+<pre><code>def simple_app(environ, start_response):
+    &quot;&quot;&quot;Simplest possible application object&quot;&quot;&quot;
+    status = '200 OK'
+    response_headers = [('Content-type', 'text/plain')]
+    start_response(status, response_headers)
+    return ['Hello world!\n']
+</code></pre>
+
+<p>这里的application被传入了两个值。
+- environ
+- start_response。
+environ是一个字典，保存了http请求的信息。
+start_response是一个函数，发送http响应。她有两个参数status 和 start_headers。
+- status必须是由状态编号和具体信息组成的字符串，必须符合RFC 2616。
+- start_headers是一个(header_name,header_value) 元组的列表元组列表。其中的hearder_name必须是合法的http header字段名。在RFC 2616, Section 4.2中有详细定义。
+当然官方还给出了类的实现。</p>
+
+<pre><code>  def __init__(self, environ, start_response):
+
+        self.environ = environ
+
+        self.start = start_response
+    def __iter__(self):
+
+        status = '200 OK'
+
+        response_headers = [('Content-type','text/plain')]
+
+        self.start(status, response_headers)
+
+        yield &quot;Hello world!\n&quot;
+</code></pre>
+
+<p>了解了如上信息后，基本上可以开始了。我们就到官方给的代码上进行修改吧。</p>
+
+<h2 id="step-3-将路径链接到函数">STEP.3 将路径链接到函数</h2>
+
+<hr />
+
+<p>首先我们得把用户请求的路径，链接到函数。我们可以实现一个getPage方法，专门做这件事。我们所拥有的信息，只有environ[&lsquo;PATH_INFO&rsquo;]。</p>
+
+<pre><code>urls = [('^/index/$','func_index'),
+        ('^/comment/$','func_comment'),
+        ('^/environ/$','get_environ'),
+        ('^/post/$','post_test')]#urls是提供给app开发者来做链接的。
+    def getPage(self):
+        path = self.environ['PATH_INFO']
+        for pattern in self.urls:
+            m = re.match(pattern[0],path)#将urls元素的第0项和path进行比对，如果匹配上了，返回函数名
+            if m:
+                function = getattr(self,pattern[1])#getattr方法来得到函数
+                return function()
+        return '404 not found'#没匹配上任何东西
+</code></pre>
+
+<p>写到这里之后，每次添加页面，就只需要在urls列表中添加一个元祖就行了。</p>
+
+<h2 id="step-4-获取模版">STEP.4 获取模版</h2>
+
+<hr />
+
+<p>既然是写web app，模版肯定是得有的。这里我提供了一种getTemplate方法来做这件事。不过我只提供了变量的替换。</p>
+
+<pre><code>    def getTemplate(self,tem_name,rep=0):
+        #这个函数返回内容,tem_name是文件名字
+        #参数rep是一个字典，默认为0
+        f = open('template/'+tem_name)
+        html = f.read()
+        if(rep!=0):
+            for to_replace in rep:
+                strinfo = re.compile('\{\%\s*'+str(to_replace)+'\s*\%\}')
+                html = strinfo.sub(rep[to_replace],html)
+        return html
+</code></pre>
+
+<h2 id="step-5-post数据的处理">STEP.5 POST数据的处理</h2>
+
+<hr />
+
+<p>要想获取POST数据，我们得通过environ[&lsquo;wsgi.input&rsquo;]来处理。而他实际上就是系统的标准输入。</p>
+
+<pre><code> environ['wsgi.input']        = sys.stdin
+</code></pre>
+
+<p>知道这点后就很好写了。</p>
+
+<pre><code>    def getPost(self):
+        if(self.environ['REQUEST_METHOD'] == 'POST'):
+            try:
+                request_body_size = int(self.environ.get('CONTENT_LENGTH', 0))#读出content_length的值
+            except:
+                request_body_size = 0
+            request_body = self.environ['wsgi.input'].read(request_body_size) #请求的body
+            post_data = parse_qs(request_body)#parse_qs是cgi提供的方法，帮助我们处理请求
+            return post_data
+</code></pre>
+
+<p>##数据库的链接</p>
+
+<hr />
+
+<pre><code>import MySQLdb
+class Model(object):
+    def __init__(self):
+    	    self.host = 'localhost'
+    	    self.port = 3306
+    	    self.user = 'admin'
+    	    self.passwd = 'admin'
+    	    self.db = 'xieyi'
+    def build_connect(self):
+    	self.conn = MySQLdb.connect(
+    		host = self.host,
+    		port = self.port,
+    		user = self.user,
+    		passwd = self.passwd,
+    		db = self.db
+    		)
+    def exec_ins(self,ins):
+    	cur = self.conn.cursor()
+    	num = cur.execute(ins)
+    	info = {} 
+    	if(num&gt;0):
+    		info = cur.fetchmany(num)
+    	cur.close()
+    	self.conn.commit()
+    	return info 
+    def close(self):
+    	self.conn.close()
+</code></pre>
+
+<h2 id="step-6-清理工作">STEP.6 清理工作</h2>
+
+<hr />
+
+<p>很多配置如果放到代码中，会增加阅读负担。于是把urls,model抽取出来。
+使得配置更加方便。</p>
+
+<h2 id="step-7-结束">STEP.7 结束</h2>
+
+<hr />
+
+<p>这只是一个web框架简易的实现，仅供娱乐。如有疏漏，还望指出。
+代码po在<a href="https://github.com/bloodycoder/skeleton">https://github.com/bloodycoder/skeleton</a></p>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="your_facebook_link">
+        <i class="fa fa-facebook-square"></i>
+    </a>
+    
+    <a class="symbol" href="your_github_link">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+    <a class="symbol" href="your_twitter_link">
+        <i class="fa fa-twitter-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2017 <i class="fa fa-heart" aria-hidden="true"></i> Hugo
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="http://nodejh.com/js/jquery-2.2.4.min.js"></script>
+<script src="http://nodejh.com/js/main.js"></script>
+<script src="http://nodejh.com/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+    </body>
+</html>
