@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Diary on Blog Title</title>
-    <link>http://nodejh.com/tags/diary/</link>
-    <description>Recent content in Diary on Blog Title</description>
+    <title>Diary on 艺</title>
+    <link>https://bloodycoder.github.io/tags/diary/</link>
+    <description>Recent content in Diary on 艺</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 06 Dec 2016 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://nodejh.com/tags/diary/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bloodycoder.github.io/tags/diary/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>某家日企公司二面</title>
-      <link>http://nodejh.com/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</link>
+      <link>https://bloodycoder.github.io/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</link>
       <pubDate>Tue, 06 Dec 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://nodejh.com/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</guid>
+      <guid>https://bloodycoder.github.io/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</guid>
       <description>今天去xx二面，面试官是总监。然后跟我聊什么我们学院多少系，系里多少人，多少人选择考研，多少人出国blahblah&amp;hellip;.（你真的</description>
     </item>
     

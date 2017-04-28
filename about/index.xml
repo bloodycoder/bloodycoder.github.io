@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Abouts on Blog Title</title>
-    <link>http://nodejh.com/about/</link>
-    <description>Recent content in Abouts on Blog Title</description>
+    <title>Abouts on 艺</title>
+    <link>https://bloodycoder.github.io/about/</link>
+    <description>Recent content in Abouts on 艺</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     
-	<atom:link href="http://nodejh.com/about/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bloodycoder.github.io/about/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>About</title>
-      <link>http://nodejh.com/about/</link>
+      <link>https://bloodycoder.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://nodejh.com/about/</guid>
+      <guid>https://bloodycoder.github.io/about/</guid>
       <description>这个网站主要是用来记录笔记和知识点elements。笔记会引用元素。然后在我阅读过程中知识点不断增加，最后构成我的整个计算机知识体系。 关于笔</description>
     </item>
     

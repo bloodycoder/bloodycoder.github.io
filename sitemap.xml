@@ -3,60 +3,60 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://nodejh.com/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</loc>
+    <loc>https://bloodycoder.github.io/post/%E6%9F%90%E5%AE%B6%E6%97%A5%E4%BC%81%E5%85%AC%E5%8F%B8%E4%BA%8C%E9%9D%A2/</loc>
     <lastmod>2016-12-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://nodejh.com/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</loc>
+    <loc>https://bloodycoder.github.io/post/%E7%94%A8python%E5%86%99web%E6%A1%86%E6%9E%B6/</loc>
     <lastmod>2016-07-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://nodejh.com/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</loc>
+    <loc>https://bloodycoder.github.io/post/%E5%A6%82%E4%BD%95%E7%94%A8python%E7%9F%A5%E9%81%93%E6%9F%90%E4%BA%BA%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9C%A8%E7%94%A8%E7%94%B5%E8%84%91/</loc>
     <lastmod>2016-07-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://nodejh.com/about/</loc>
+    <loc>https://bloodycoder.github.io/about/</loc>
   </url>
   
   <url>
-    <loc>http://nodejh.com/about/</loc>
+    <loc>https://bloodycoder.github.io/about/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://nodejh.com/</loc>
+    <loc>https://bloodycoder.github.io/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://bloodycoder.github.io/tags/diary/</loc>
     <lastmod>2016-12-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://nodejh.com/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://nodejh.com/tags/diary/</loc>
+    <loc>https://bloodycoder.github.io/post/</loc>
     <lastmod>2016-12-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://nodejh.com/post/</loc>
-    <lastmod>2016-12-06T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://nodejh.com/tags/python/</loc>
+    <loc>https://bloodycoder.github.io/tags/python/</loc>
     <lastmod>2016-07-23T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://nodejh.com/tags/</loc>
+    <loc>https://bloodycoder.github.io/tags/</loc>
+    <lastmod>2016-12-06T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://bloodycoder.github.io/</loc>
     <lastmod>2016-12-06T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
