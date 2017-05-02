@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 艺</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 01 May 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 02 May 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bloodycoder.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>effective c&#43;&#43; 读书笔记01</title>
+      <link>https://bloodycoder.github.io/post/effective-c&#43;&#43;_note2/</link>
+      <pubDate>Tue, 02 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://bloodycoder.github.io/post/effective-c&#43;&#43;_note2/</guid>
+      <description>智能指针 click me RAII守则 click me explicit click me 为什么运算符重载的时候，都要加const 比如一个类的名字Test Test operator+(const Test &amp;amp;t2){ pass; } 这样的代码是可以通过编译的。但</description>
+    </item>
     
     <item>
       <title>闲书笔记01</title>

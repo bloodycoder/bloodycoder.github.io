@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://bloodycoder.github.io/post/effective-c&#43;&#43;_note2/</loc>
+    <lastmod>2017-05-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://bloodycoder.github.io/post/%E8%AF%BB%E4%B9%A6%E6%9C%89%E6%84%9F/</loc>
     <lastmod>2017-05-01T00:00:00+00:00</lastmod>
   </url>
@@ -50,13 +55,13 @@
   
   <url>
     <loc>https://bloodycoder.github.io/tags/effective-c&#43;&#43;/</loc>
-    <lastmod>2017-04-27T00:00:00+00:00</lastmod>
+    <lastmod>2017-05-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://bloodycoder.github.io/post/</loc>
-    <lastmod>2017-05-01T00:00:00+00:00</lastmod>
+    <lastmod>2017-05-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -74,7 +79,7 @@
   
   <url>
     <loc>https://bloodycoder.github.io/</loc>
-    <lastmod>2017-05-01T00:00:00+00:00</lastmod>
+    <lastmod>2017-05-02T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
