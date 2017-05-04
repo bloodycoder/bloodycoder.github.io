@@ -1,0 +1,152 @@
+    <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="stream of consciousness">
+		<meta name="description" content="Blog Description">
+		<meta name="generator" content="Hugo 0.21-DEV" />
+		<title>effective c&#43;&#43; 读书笔记03 &middot; 艺</title>
+		<link rel="shortcut icon" href="https://bloodycoder.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://bloodycoder.github.io/css/style.css">
+		<link rel="stylesheet" href="https://bloodycoder.github.io/css/highlight.css">
+		
+
+		
+		<link rel="stylesheet" href="https://bloodycoder.github.io/css/font-awesome.min.css">
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='https://bloodycoder.github.io/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='https://bloodycoder.github.io/post'>Archive</a>
+	<a href='https://bloodycoder.github.io/tags'>Tags</a>
+	<a href='https://bloodycoder.github.io/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        effective c&#43;&#43; 读书笔记03
+                    </h1>
+                    <h2 class="headline">
+                    May 3, 2017 00:00
+                    · 216 words
+                    · 1 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://bloodycoder.github.io/tags/effective-c&#43;&#43;">effective c&#43;&#43;</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<h3 id="函数指针">函数指针</h3>
+
+<h4 id="指向函数的指针">指向函数的指针。</h4>
+
+<pre><code>int (*f) (int,int);
+</code></pre>
+
+<h4 id="指向成员函数的指针">指向成员函数的指针。</h4>
+
+<pre><code>int (A::*f) (int,int);
+</code></pre>
+
+<h4 id="函数指针数组">函数指针数组</h4>
+
+<pre><code>int (*f[]) (int,int);
+</code></pre>
+
+<h3 id="对内置类型set">对内置类型set</h3>
+
+<h3 id="c-类型转换">c++类型转换</h3>
+
+<ul>
+<li>const_cast<T> 消除常量转换</li>
+<li>dynamic_cast<T></li>
+<li>reinterpret_cast<T></li>
+<li>static_cast<T> 强迫隐式转换</li>
+</ul>
+
+<p>如果子类继承父类的<code>virtual</code>。可以不加，因为编译器会自动帮你加。但你加的话，方便阅读。</p>
+
+<h3 id="继承">继承</h3>
+
+<p>继承意味着&rsquo;is a&rsquo;。不要把&rsquo;has a&rsquo;或者&rsquo;is a implementation in terms of&rsquo;弄混。</p>
+
+<p>如果你继承了有重载函数的base class。但你想改写重载函数中的一个。那么其余的重载函数，你得加上using。否则由于命名一样，会被作用域隐藏。</p>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/bloodycode">
+        <i class="fa fa-fa-caret-square-o-right"></i>
+    </a>
+    
+    <a class="symbol" href="https://github.com/bloodycoder">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2017 <i class="fa fa-heart" aria-hidden="true"></i> stream of consciousness
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="https://bloodycoder.github.io/js/jquery-2.2.4.min.js"></script>
+<script src="https://bloodycoder.github.io/js/main.js"></script>
+<script src="https://bloodycoder.github.io/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+    </body>
+</html>
