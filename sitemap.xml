@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://bloodycoder.github.io/post/head-first-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F_note1/</loc>
+    <lastmod>2017-05-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://bloodycoder.github.io/post/%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%80%83%E8%AF%95/</loc>
     <lastmod>2017-05-07T00:00:00+00:00</lastmod>
   </url>
@@ -71,7 +76,7 @@
   
   <url>
     <loc>https://bloodycoder.github.io/post/</loc>
-    <lastmod>2017-05-07T00:00:00+00:00</lastmod>
+    <lastmod>2017-05-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -89,7 +94,13 @@
   
   <url>
     <loc>https://bloodycoder.github.io/</loc>
-    <lastmod>2017-05-07T00:00:00+00:00</lastmod>
+    <lastmod>2017-05-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://bloodycoder.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2017-05-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

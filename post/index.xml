@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 艺</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 07 May 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 09 May 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bloodycoder.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>设计模式 读书笔记01</title>
+      <link>https://bloodycoder.github.io/post/head-first-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F_note1/</link>
+      <pubDate>Tue, 09 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://bloodycoder.github.io/post/head-first-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F_note1/</guid>
+      <description>引言 最近在读head first设计模式这本书，写点读书笔记，也是一种记录。之前从没接触过设计模式，虽然学校有开这门课，但当时觉得这不过是一群</description>
+    </item>
     
     <item>
       <title>为什么需要考试</title>

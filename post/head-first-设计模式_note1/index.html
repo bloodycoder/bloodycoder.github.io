@@ -1,0 +1,157 @@
+    <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="stream of consciousness">
+		<meta name="description" content="Blog Description">
+		<meta name="generator" content="Hugo 0.21-DEV" />
+		<title>设计模式 读书笔记01 &middot; 艺</title>
+		<link rel="shortcut icon" href="https://bloodycoder.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://bloodycoder.github.io/css/style.css">
+		<link rel="stylesheet" href="https://bloodycoder.github.io/css/highlight.css">
+		
+
+		
+		<link rel="stylesheet" href="https://bloodycoder.github.io/css/font-awesome.min.css">
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='https://bloodycoder.github.io/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='https://bloodycoder.github.io/post'>Archive</a>
+	<a href='https://bloodycoder.github.io/tags'>Tags</a>
+	<a href='https://bloodycoder.github.io/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        设计模式 读书笔记01
+                    </h1>
+                    <h2 class="headline">
+                    May 9, 2017 00:00
+                    · 666 words
+                    · 2 minutes read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://bloodycoder.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F">设计模式</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<h3 id="引言">引言</h3>
+
+<p>最近在读head first设计模式这本书，写点读书笔记，也是一种记录。之前从没接触过设计模式，虽然学校有开这门课，但当时觉得这不过是一群人设计了一个规范，然后还逼着别人学，骗钱的东西罢了。跟计算机其他课程相比，完全是一派胡言。但读了后发现，还是有点用的。</p>
+
+<h3 id="观察者模式">观察者模式</h3>
+
+<p>这个模式有点像RSS。有一个出版者，然后有一个订阅者。出版者会保存一个list，这个list保存了所有的订阅者。出版者可以推送信息给订阅者。</p>
+
+<p>这是一种松耦合。类交互，却不清楚细节。</p>
+
+<p>出版者并不关心订阅者的具体实现，但是出版者知道订阅者实现了某一接口。(订阅者继承某个订阅者的类，然后重载接口)</p>
+
+<h3 id="装饰者模式">装饰者模式</h3>
+
+<p>这一章，书中提到的是咖啡店的例子。比如总共有摩卡，拿铁，美式&hellip;共100种咖啡。当你新引进一种调料，你就的新建100个类。这明显非常复杂。</p>
+
+<p>我们可以让调料和咖啡都继承自某一基类，然后调料的构造函数的输入参数的类型就是这基类。从而，调料能够修饰调料和咖啡。</p>
+
+<h3 id="简单工厂模式和抽象工厂模式">简单工厂模式和抽象工厂模式</h3>
+
+<p>抽象工厂模式就是实现一个接口，它会声明一些方法。然后子类会实现这些方法，虽然实现方式可能不一样。这样一来，你就只需要关心他们提供了哪些接口。不用关心实现。</p>
+
+<p>简单工厂模式就是提供一个方法，然后你只需要知道这个方法，不需要关心他的实现。</p>
+
+<h3 id="单件模式">单件模式</h3>
+
+<p>就是最多只能有一个实例的类。</p>
+
+<p>做法是，把构造函数声明为private。然后提供一个static方法，这个方法能够构造一个对象。会有一个static private变量保存这个构造出来的对象。如果这个对象是null，就创建一个，否则就返回他。</p>
+
+<p>这样就能保证实例只有一个。</p>
+
+<p>但这样是线程不安全的。</p>
+
+<h4 id="解决方案">解决方案</h4>
+
+<ul>
+<li>信号量同步。</li>
+<li>给静态变量赋值，从而在类建立的时候，静态变量就存在。</li>
+</ul>
+
+                </section>
+            </article>
+
+            
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/bloodycode">
+        <i class="fa fa-fa-caret-square-o-right"></i>
+    </a>
+    
+    <a class="symbol" href="https://github.com/bloodycoder">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2017 <i class="fa fa-heart" aria-hidden="true"></i> stream of consciousness
+    
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
+
+        </section>
+
+        <script src="https://bloodycoder.github.io/js/jquery-2.2.4.min.js"></script>
+<script src="https://bloodycoder.github.io/js/main.js"></script>
+<script src="https://bloodycoder.github.io/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+    </body>
+</html>
