@@ -6,10 +6,28 @@
     <description>Recent content on 艺</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 13 May 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 16 May 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bloodycoder.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>网络编程02</title>
+      <link>https://bloodycoder.github.io/post/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B02/</link>
+      <pubDate>Tue, 16 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://bloodycoder.github.io/post/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B02/</guid>
+      <description>vps 便宜vps.提供商 v2ray加速 kcp协议 委托 C++中有函数指针，但C#没有。但是有时候需要调用一个方法，这时候，委托出现了。 delegate void MyDelegate(); MyDelegate mydelegate =</description>
+    </item>
+    
+    <item>
+      <title>网络编程01</title>
+      <link>https://bloodycoder.github.io/post/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B01/</link>
+      <pubDate>Mon, 15 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://bloodycoder.github.io/post/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B01/</guid>
+      <description>Web Socket和Socket 套接字，实际就是传输层的接口。用于抽象传输层，隐藏细节。一对套接字可以进行通信。 Web Socket，是基于TCP协议</description>
+    </item>
     
     <item>
       <title>struggle with depression 02</title>
