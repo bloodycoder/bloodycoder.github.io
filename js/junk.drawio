@@ -1,32 +1,63 @@
-<mxfile host="app.diagrams.net" modified="2020-11-03T13:13:29.328Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36" etag="H_Ye7yNtXPvbV7e-ITWQ" version="13.8.8" type="github">
+<mxfile host="app.diagrams.net" modified="2020-11-04T02:29:54.860Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36" etag="U61vEX8lLmRq8OOfj-4y" version="13.8.8" type="github">
   <diagram id="kCkOvWoX49JWFvwYqjs2" name="Page-1">
-    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1182" dy="732" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="PSZ55FZrppfJz0VA6NEx-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="PSZ55FZrppfJz0VA6NEx-28" target="PSZ55FZrppfJz0VA6NEx-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="VKr-EImMsc7NlC5uQBsD-39" value="&lt;pre style=&quot;box-sizing: border-box; font-size: 13px; margin-top: 0px; margin-bottom: 1em; overflow: auto; padding: 10px 15px; line-height: 1.6; border-radius: 3px; font-style: normal; font-weight: 400; letter-spacing: normal; text-indent: 0px; text-transform: none; word-spacing: 0px;&quot;&gt;    3&#xa;   / \&#xa;  5   1&#xa; / \ / \&#xa;6  2 0  8&#xa;  / \&#xa; 7   4&lt;/pre&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="120" y="50" width="120" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="PSZ55FZrppfJz0VA6NEx-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="PSZ55FZrppfJz0VA6NEx-28" target="PSZ55FZrppfJz0VA6NEx-34">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="VKr-EImMsc7NlC5uQBsD-40" value="二叉树公共祖先问题，本质上是中序遍历信息的携带。中序遍历与其他遍历的区别在于，中序遍历可以在父节点处理子节点的信息。&lt;br&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="290" y="20" width="410" height="20" as="geometry" />
         </mxCell>
+        <mxCell id="PSZ55FZrppfJz0VA6NEx-28" value="剩余难题,2016-4491以及2016-4489" style="rounded=1;arcSize=9;fillColor=#F7F8F9;align=left;spacingLeft=5;strokeColor=#DEE1E6;html=1;strokeWidth=2;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="100" y="160" width="290" height="40" as="geometry" />
+        </mxCell>
         <mxCell id="VKr-EImMsc7NlC5uQBsD-41" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;" vertex="1" parent="1">
           <mxGeometry x="520" y="110" width="50" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="PSZ55FZrppfJz0VA6NEx-33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PSZ55FZrppfJz0VA6NEx-29" target="PSZ55FZrppfJz0VA6NEx-32">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="VKr-EImMsc7NlC5uQBsD-42" value="两种情况" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="440" y="150" width="75" height="20" as="geometry" />
         </mxCell>
+        <UserObject label="2016-4489" link="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70492" id="PSZ55FZrppfJz0VA6NEx-29">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=middle;fontColor=#0000EE;fontStyle=4;" vertex="1" parent="1">
+            <mxGeometry x="490" y="160" width="60" height="40" as="geometry" />
+          </mxCell>
+        </UserObject>
         <mxCell id="VKr-EImMsc7NlC5uQBsD-43" value="目标在不同的两个分支" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="570" y="100" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="PSZ55FZrppfJz0VA6NEx-32" value="这个暂时还不知道怎么切，没有target-line，而且还没有复现" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="150" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="VKr-EImMsc7NlC5uQBsD-44" value="目标同一个分支" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="570" y="200" width="140" height="20" as="geometry" />
         </mxCell>
+        <mxCell id="PSZ55FZrppfJz0VA6NEx-37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PSZ55FZrppfJz0VA6NEx-34" target="PSZ55FZrppfJz0VA6NEx-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="VKr-EImMsc7NlC5uQBsD-45" value="先处理第一种情况" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="140" y="270" width="110" height="20" as="geometry" />
         </mxCell>
+        <UserObject label="2016-4491" link="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70909" id="PSZ55FZrppfJz0VA6NEx-34">
+          <mxCell style="text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=middle;fontColor=#0000EE;fontStyle=4;" vertex="1" parent="1">
+            <mxGeometry x="400" y="250" width="60" height="40" as="geometry" />
+          </mxCell>
+        </UserObject>
         <mxCell id="VKr-EImMsc7NlC5uQBsD-46" value="&lt;pre style=&quot;box-sizing: border-box ; font-size: 13px ; margin-top: 0px ; margin-bottom: 1em ; overflow: auto ; padding: 10px 15px ; line-height: 1.6 ; border-radius: 3px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-indent: 0px ; text-transform: none ; word-spacing: 0px&quot;&gt;    3&lt;br&gt;   / \&lt;br&gt;  5   &lt;font color=&quot;#ff3333&quot;&gt;1&lt;/font&gt;&lt;br&gt; / \ / \&lt;br&gt;6  2 0  8&lt;br&gt;  / \&lt;br&gt; &lt;font color=&quot;#ff3333&quot;&gt;7&lt;/font&gt;   4&lt;/pre&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="260" y="260" width="120" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="PSZ55FZrppfJz0VA6NEx-36" value="这个是触发bug可能有多种情况，不是一个独立的bug" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="510" y="240" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="VKr-EImMsc7NlC5uQBsD-47" value="假设不同源" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="414" y="280" width="136" height="20" as="geometry" />
