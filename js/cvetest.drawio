@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-11-04T03:38:34.139Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36" etag="Bs0Prs-2Tx5pemfWzdXD" version="13.8.8" type="github">
+<mxfile host="app.diagrams.net" modified="2020-11-04T07:32:46.735Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36" etag="_hBNp4Q5juYoK2NueITl" version="13.8.8" type="github">
   <diagram id="kCkOvWoX49JWFvwYqjs2" name="Page-1">
     <mxGraphModel dx="2009" dy="732" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -44,6 +44,39 @@
         </UserObject>
         <mxCell id="PSZ55FZrppfJz0VA6NEx-36" value="这个是触发bug可能有多种情况，不是一个独立的bug" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="550" y="90" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="jHGbr8kaxOsJ8rt-vjMn-4" target="jHGbr8kaxOsJ8rt-vjMn-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-4" value="首先跑firstrun，找到obj1，然后找到调用栈" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="150" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="jHGbr8kaxOsJ8rt-vjMn-6" target="jHGbr8kaxOsJ8rt-vjMn-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-6" value="根据调用栈补充targetline" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="jHGbr8kaxOsJ8rt-vjMn-8" target="jHGbr8kaxOsJ8rt-vjMn-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-8" value="进行第二次编译" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="560" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-10" value="run" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="700" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-12" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.6;dx=40;notch=0;" vertex="1" parent="1">
+          <mxGeometry y="560" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-14" value="string_appendn (cplus-dem.c:4910)&lt;br&gt;gnu_special (cplus-dem.c:3033)&lt;br&gt;internal_cplus_demangle (cplus-dem.c:1200)&lt;br&gt;cplus_demangle (cplus-dem.c:896)&lt;br&gt;demangle_it (cxxfilt.c:62)" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="180" width="550" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="jHGbr8kaxOsJ8rt-vjMn-16" target="jHGbr8kaxOsJ8rt-vjMn-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jHGbr8kaxOsJ8rt-vjMn-16" value="切片" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="430" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
