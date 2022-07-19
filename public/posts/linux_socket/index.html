@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>源码剖析 listen :: Terminal</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="从内核源码分析服务器创建socket到accept的过程" />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://example.com/posts/linux_socket/" />
+
+
+
+
+<link rel="stylesheet" href="https://example.com/assets/style.css">
+
+
+
+
+
+
+<link rel="apple-touch-icon" href="https://example.com/img/apple-touch-icon-192x192.png">
+
+  <link rel="shortcut icon" href="https://example.com/img/favicon/orange.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="源码剖析 listen">
+<meta property="og:description" content="从内核源码分析服务器创建socket到accept的过程" />
+<meta property="og:url" content="https://example.com/posts/linux_socket/" />
+<meta property="og:site_name" content="Terminal" />
+
+  
+    <meta property="og:image" content="https://example.com/img/favicon/orange.png">
+  
+
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+
+  <meta property="article:published_time" content="2022-07-19 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="orange">
+
+
+<div class="container headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    Terminal
+  </div>
+</a>
+
+    </div>
+    
+      <div class="menu-trigger">menu</div>
+    
+  </div>
+  
+    <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+      
+    
+
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">About</a></li>
+      
+    
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<div class="post">
+  <h1 class="post-title">
+    <a href="https://example.com/posts/linux_socket/">源码剖析 listen</a></h1>
+  <div class="post-meta">
+    
+      <span class="post-date">
+        2022-07-19
+        
+      </span>
+    
+    
+    
+  </div>
+
+  
+  <span class="post-tags">
+    
+    #<a href="https://example.com/tags/socket/">socket</a>&nbsp;
+    
+    #<a href="https://example.com/tags/linux/">linux</a>&nbsp;
+    
+  </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <div>
+    <h2>目录</h2>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#socket干了啥">socket干了啥</a></li>
+    <li><a href="#bind-干了啥">bind 干了啥</a></li>
+    <li><a href="#listen-干了啥">listen 干了啥</a></li>
+    <li><a href="#accept-干了啥">accept 干了啥</a></li>
+  </ul>
+</nav>
+</div>
+<h1 id="前言">前言<a href="#前言" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>内核版本linux-5.0.1. released  on 2019年3月4日</p>
+<p>主要源码位于socket.c中</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//创建socket
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> s <span style="color:#f92672">=</span> socket(AF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);   
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//绑定
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>bind(s, ...)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//监听
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>listen(s, ...)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//接受客户端连接
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> accept(s, ...)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//接收客户端数据
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>recv(c, ...);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//将数据打印出来
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>printf(...)
+</span></span></code></pre></div><p>首先根据<code>syscall_64.tbl</code>可以知道bind、listen、accept都是系统调用</p>
+<pre tabindex="0"><code>41	common	socket			__x64_sys_socket
+43	common	accept			__x64_sys_accept
+...
+49	common	bind			__x64_sys_bind
+50	common	listen			__x64_sys_listen
+</code></pre><h1 id="socket干了啥">socket干了啥<a href="#socket干了啥" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>创建了一个文件，初始化socket结构体，并且实现了文件和socket的互相绑定。最终返回文件的文件描述符.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> socket {
+</span></span><span style="display:flex;"><span>	socket_state		state;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">short</span>			type;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span>		flags;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> socket_wq	<span style="color:#f92672">*</span>wq;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">struct</span> file		<span style="color:#f92672">*</span>file; <span style="color:#75715e">//socket需要和一个文件绑定.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">struct</span> sock		<span style="color:#f92672">*</span>sk;  <span style="color:#75715e">//sockets的网络层表示
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">struct</span> proto_ops	<span style="color:#f92672">*</span>ops;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>socket_state的枚举含义</p>
+<pre><code>● SS_FREE = 0,			/* not allocated		*/
+● SS_UNCONNECTED,		/* unconnected to any socket	*/
+● SS_CONNECTING,		/* in process of connecting	*/
+● SS_CONNECTED,			/* connected to socket		*/
+● SS_DISCONNECTING		/* in process of disconnecting	*/
+</code></pre>
+<p>注意，调用socket的返回值的fd由sock_map_fd返回.</p>
+<p><img src="/images/accept0/1.png" alt=""></p>
+<h1 id="bind-干了啥">bind 干了啥<a href="#bind-干了啥" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<h1 id="listen-干了啥">listen 干了啥<a href="#listen-干了啥" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<h1 id="accept-干了啥">accept 干了啥<a href="#accept-干了啥" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+
+      </div></div>
+
+  
+  
+  
+
+  
+  
+
+  
+</div>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2022 Powered by <a href="http://gohugo.io">Hugo</a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+<script src="https://example.com/assets/main.js"></script>
+<script src="https://example.com/assets/prism.js"></script>
+
+
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
