@@ -25,7 +25,7 @@ int c = accept(s, ...)
 recv(c, ...);
 //将数据打印出来
 printf(...)
-``` 
+```
 
 首先根据`syscall_64.tbl`可以知道bind、listen、accept都是系统调用
 
@@ -63,7 +63,7 @@ socket_state的枚举含义
     ● SS_CONNECTING,		/* in process of connecting	*/
     ● SS_CONNECTED,			/* connected to socket		*/
     ● SS_DISCONNECTING		/* in process of disconnecting	*/
-    
+
 注意，调用socket的返回值的fd由sock_map_fd返回.
 
 ![](/images/accept0/1.png)

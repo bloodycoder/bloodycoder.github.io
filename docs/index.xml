@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Terminal</title>
-    <link>https://example.com/</link>
+    <link>https://bloodycoder.github.io/</link>
     <description>Recent content on Terminal</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 19 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 19 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bloodycoder.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>源码剖析 listen</title>
-      <link>https://example.com/posts/linux_socket/</link>
+      <link>https://bloodycoder.github.io/posts/linux_socket/</link>
       <pubDate>Tue, 19 Jul 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/posts/linux_socket/</guid>
+      <guid>https://bloodycoder.github.io/posts/linux_socket/</guid>
       <description>目录前言 socket干了啥 bind 干了啥 listen 干了啥 accept 干了啥 前言 内核版本linux-5.0.1. released on 2019年3月4日
 主要源码位于socket.c中
 //创建socket int s = socket(AF_INET, SOCK_STREAM, 0); //绑定 bind(s, ...) //监听 listen(s, ...) //接受客户端连接 int c = accept(s, ...) //接收客户端数据 recv(c, ...); //将数据打印出来 printf(...) 首先根据syscall_64.tbl可以知道bind、listen、accept都是系统调用
@@ -73,7 +73,7 @@ struct socket { socket_state	state; short	type; unsigned long	flags; struct sock
 ● SS_DISCONNECTING		/* in process of disconnecting	*/
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;注意，调用socket的返回值的fd由sock_map_fd返回.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://example.com/images/accept0/1.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://bloodycoder.github.io/images/accept0/1.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h1 id=&#34;bind-干了啥&#34;&gt;bind 干了啥&lt;/h1&gt;
 &lt;h1 id=&#34;listen-干了啥&#34;&gt;listen 干了啥&lt;/h1&gt;
 &lt;h1 id=&#34;accept-干了啥&#34;&gt;accept 干了啥&lt;/h1&gt;
@@ -82,10 +82,10 @@ struct socket { socket_state	state; short	type; unsigned long	flags; struct sock
     
     <item>
       <title>About</title>
-      <link>https://example.com/about/</link>
+      <link>https://bloodycoder.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/about/</guid>
+      <guid>https://bloodycoder.github.io/about/</guid>
       <description>Hi there picardxie@foxmail.com</description>
       <content>&lt;h1 id=&#34;hi-there&#34;&gt;Hi there&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;mailto:picardxie@foxmail.com&#34;&gt;picardxie@foxmail.com&lt;/a&gt;&lt;/p&gt;
