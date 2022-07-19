@@ -2,7 +2,7 @@ baseurl = "https://example.com/"
 languageCode = "en-us"
 theme = "terminal"
 paginate = 5
-
+publishDir = "docs"
 [params]
   contentTypeName = "posts"
   themeColor = "orange"
