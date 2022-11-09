@@ -70,8 +70,23 @@ socket_state的枚举含义
 
 # bind 干了啥
 
-
+eee
 
 # listen 干了啥
+
+在listen中的主要任务: 
+
+1. 设置socket状态为TCP_LISTEN
+2. 将socket链入半连接队列的Hash表中
+
+![linux_listen_ac.drawio](C:\Users\Picard\Dropbox\draw.io图片\linux_listen_ac.drawio.png)
+
+```
+struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
+			   struct request_sock *req,
+			   bool fastopen, bool *req_stolen)
+```
+
+这个看着像三次握手的代码.
 
 # accept 干了啥
