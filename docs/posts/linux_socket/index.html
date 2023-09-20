@@ -155,17 +155,17 @@
 <p>内核版本linux-5.0.1. released  on 2019年3月4日</p>
 <p>主要源码位于socket.c中</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//创建socket
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> s <span style="color:#f92672">=</span> socket(AF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);   
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> s <span style="color:#f92672">=</span> <span style="color:#a6e22e">socket</span>(AF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);   
 </span></span><span style="display:flex;"><span><span style="color:#75715e">//绑定
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>bind(s, ...)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">bind</span>(s, ...)
 </span></span><span style="display:flex;"><span><span style="color:#75715e">//监听
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>listen(s, ...)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">listen</span>(s, ...)
 </span></span><span style="display:flex;"><span><span style="color:#75715e">//接受客户端连接
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> accept(s, ...)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> <span style="color:#a6e22e">accept</span>(s, ...)
 </span></span><span style="display:flex;"><span><span style="color:#75715e">//接收客户端数据
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>recv(c, ...);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">recv</span>(c, ...);
 </span></span><span style="display:flex;"><span><span style="color:#75715e">//将数据打印出来
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>printf(...)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">printf</span>(...)
 </span></span></code></pre></div><p>首先根据<code>syscall_64.tbl</code>可以知道bind、listen、accept都是系统调用</p>
 <pre tabindex="0"><code>41	common	socket			__x64_sys_socket
 43	common	accept			__x64_sys_accept
@@ -196,13 +196,42 @@
 <p>注意，调用socket的返回值的fd由sock_map_fd返回.</p>
 <p><img src="/images/accept0/1.png" alt=""></p>
 <h1 id="bind-干了啥">bind 干了啥<a href="#bind-干了啥" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>eee</p>
 <h1 id="listen-干了啥">listen 干了啥<a href="#listen-干了啥" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>在listen中的主要任务:</p>
+<ol>
+<li>设置socket状态为TCP_LISTEN</li>
+<li>将socket链入半连接队列的Hash表中</li>
+</ol>
+<p><img src="C:%5CUsers%5CPicard%5CDropbox%5Cdraw.io%E5%9B%BE%E7%89%87%5Clinux_listen_ac.drawio.png" alt="linux_listen_ac.drawio"></p>
+<pre tabindex="0"><code>struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
+			   struct request_sock *req,
+			   bool fastopen, bool *req_stolen)
+</code></pre><p>这个看着像三次握手的代码.</p>
 <h1 id="accept-干了啥">accept 干了啥<a href="#accept-干了啥" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
 
       </div></div>
 
   
   
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="https://bloodycoder.github.io/posts/2023_09_20/">
+                <span class="button__icon">←</span>
+                <span class="button__text">股市随笔</span>
+            </a>
+        </span>
+        
+        
+    </div>
+</div>
+
   
 
   
@@ -218,7 +247,7 @@
   <div class="footer__inner">
     
       <div class="copyright">
-        <span>© 2022 Powered by <a href="http://gohugo.io">Hugo</a></span>
+        <span>© 2023 Powered by <a href="http://gohugo.io">Hugo</a></span>
     
         <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
       </div>

@@ -5,7 +5,7 @@
     <link>https://bloodycoder.github.io/tags/linux/</link>
     <description>Recent content in linux on Terminal</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <language>en</language>
     <lastBuildDate>Tue, 19 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bloodycoder.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>源码剖析 listen</title>
@@ -34,17 +34,17 @@ struct socket { socket_state	state; short	type; unsigned long	flags; struct sock
 &lt;p&gt;内核版本linux-5.0.1. released  on 2019年3月4日&lt;/p&gt;
 &lt;p&gt;主要源码位于socket.c中&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//创建socket
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; socket(AF_INET, SOCK_STREAM, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;);   
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;socket&lt;/span&gt;(AF_INET, SOCK_STREAM, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;);   
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//绑定
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;bind(s, ...)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;bind&lt;/span&gt;(s, ...)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//监听
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;listen(s, ...)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;listen&lt;/span&gt;(s, ...)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//接受客户端连接
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; accept(s, ...)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;accept&lt;/span&gt;(s, ...)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//接收客户端数据
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;recv(c, ...);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;recv&lt;/span&gt;(c, ...);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//将数据打印出来
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;printf(...)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;printf&lt;/span&gt;(...)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;首先根据&lt;code&gt;syscall_64.tbl&lt;/code&gt;可以知道bind、listen、accept都是系统调用&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;41	common	socket			__x64_sys_socket
 43	common	accept			__x64_sys_accept
@@ -75,7 +75,18 @@ struct socket { socket_state	state; short	type; unsigned long	flags; struct sock
 &lt;p&gt;注意，调用socket的返回值的fd由sock_map_fd返回.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://bloodycoder.github.io/images/accept0/1.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h1 id=&#34;bind-干了啥&#34;&gt;bind 干了啥&lt;/h1&gt;
+&lt;p&gt;eee&lt;/p&gt;
 &lt;h1 id=&#34;listen-干了啥&#34;&gt;listen 干了啥&lt;/h1&gt;
+&lt;p&gt;在listen中的主要任务:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;设置socket状态为TCP_LISTEN&lt;/li&gt;
+&lt;li&gt;将socket链入半连接队列的Hash表中&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;C:%5CUsers%5CPicard%5CDropbox%5Cdraw.io%E5%9B%BE%E7%89%87%5Clinux_listen_ac.drawio.png&#34; alt=&#34;linux_listen_ac.drawio&#34;&gt;&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
+			   struct request_sock *req,
+			   bool fastopen, bool *req_stolen)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个看着像三次握手的代码.&lt;/p&gt;
 &lt;h1 id=&#34;accept-干了啥&#34;&gt;accept 干了啥&lt;/h1&gt;
 </content>
     </item>

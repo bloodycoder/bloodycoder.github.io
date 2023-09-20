@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Terminal</title>
-    <link>https://bloodycoder.github.io/posts/</link>
-    <description>Recent content in Posts on Terminal</description>
+    <title>Terminal</title>
+    <link>https://bloodycoder.github.io/</link>
+    <description>Recent content on Terminal</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 20 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://bloodycoder.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 20 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://bloodycoder.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>股市随笔</title>
       <link>https://bloodycoder.github.io/posts/2023_09_20/</link>
@@ -126,6 +126,18 @@ struct socket { socket_state	state; short	type; unsigned long	flags; struct sock
 			   bool fastopen, bool *req_stolen)
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个看着像三次握手的代码.&lt;/p&gt;
 &lt;h1 id=&#34;accept-干了啥&#34;&gt;accept 干了啥&lt;/h1&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://bloodycoder.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://bloodycoder.github.io/about/</guid>
+      <description>Hi there picardxie@foxmail.com</description>
+      <content>&lt;h1 id=&#34;hi-there&#34;&gt;Hi there&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;mailto:picardxie@foxmail.com&#34;&gt;picardxie@foxmail.com&lt;/a&gt;&lt;/p&gt;
 </content>
     </item>
     
