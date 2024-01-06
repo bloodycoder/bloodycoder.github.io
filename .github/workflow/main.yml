@@ -22,11 +22,12 @@ jobs:
           # extended: true
 
       - name: Build
-        run: hugo --minify
+        run: hugo
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GH_PAGE_ACTION_TOKEN }}
-          publish_dir: ./docs
+          PUBLISH_DIR: ./docs
+          PUBLISH_BRANCH: master
+          commit_message: ${{ github.event.head_commit.message }}
