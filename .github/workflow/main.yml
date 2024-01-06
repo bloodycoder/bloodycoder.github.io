@@ -29,5 +29,6 @@ jobs:
         with:
           github_token: ${{ secrets.GH_PAGE_ACTION_TOKEN }}
           PUBLISH_DIR: ./docs
+          EXTERNAL_REPOSITORY: bloodycoder/bloodycoder.github.io
           PUBLISH_BRANCH: master
           commit_message: ${{ github.event.head_commit.message }}
