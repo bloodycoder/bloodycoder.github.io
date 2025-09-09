@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电动旅行日志 | 模块化京沪线</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .note-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .note-header {
+            background: linear-gradient(135deg, #1a535c 0%, #4ecdc4 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .note-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+
+        .note-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .note-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+        }
+
+        .timeline-container {
+            padding: 30px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .timeline-scroll {
+            display: flex;
+            gap: 20px;
+            min-width: max-content;
+            padding-bottom: 20px;
+        }
+
+        .day-card {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            padding: 25px;
+            min-width: 280px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .day-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-card.optional {
+            opacity: 0.85;
+            border: 2px dashed #4ecdc4;
+        }
+
+        .day-card.optional::after {
+            content: "可跳过";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #4ecdc4;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .day-marker {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4ecdc4 0%, #1a535c 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .day-date {
+            font-size: 14px;
+            color: #6c757d;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .day-route {
+            color: #1a535c;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .day-activities {
+            color: #495057;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .charging-info {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(26, 83, 92, 0.1) 100%);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .charging-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a535c;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .charging-title::before {
+            content: "⚡";
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .charging-details {
+            font-size: 13px;
+            color: #4a6b7d;
+            line-height: 1.5;
+        }
+
+        .module-section {
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .module-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #1a535c;
+            text-align: center;
+            position: relative;
+        }
+
+        .module-title::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #4ecdc4, #1a535c);
+            border-radius: 2px;
+            margin: 15px auto 0;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 25px;
+            border-radius: 16px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .module-icon {
+            font-size: 28px;
+            margin-right: 12px;
+            background: linear-gradient(135deg, #4ecdc4 0%, #1a535c 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .module-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a535c;
+        }
+
+        .module-details {
+            font-size: 14px;
+            color: #495057;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .module-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .option-tag {
+            background: linear-gradient(135deg, #4ecdc4 0%, #1a535c 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .option-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(26, 83, 92, 0.2);
+        }
+
+        .budget-section {
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(26, 83, 92, 0.05) 0%, rgba(78, 205, 196, 0.05) 100%);
+        }
+
+        .budget-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #1a535c;
+            text-align: center;
+            position: relative;
+        }
+
+        .budget-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, #4ecdc4, #1a535c);
+            border-radius: 2px;
+            margin: 12px auto 0;
+        }
+
+        .budget-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .budget-item {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .budget-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .budget-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+
+        .budget-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a535c;
+        }
+
+        .budget-total {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #4ecdc4 0%, #1a535c 100%);
+            color: white;
+            margin-top: 20px;
+        }
+
+        .choice-section {
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .choice-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #1a535c;
+            text-align: center;
+        }
+
+        .choice-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .choice-card {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 25px;
+            border-radius: 16px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .choice-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .choice-icon {
+            font-size: 32px;
+            margin-right: 15px;
+        }
+
+        .choice-name {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .choice-details {
+            font-size: 14px;
+            color: #495057;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .choice-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .choice-tag {
+            background: rgba(78, 205, 196, 0.2);
+            color: #1a535c;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .note-tags {
+            padding: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .note-tag {
+            background: linear-gradient(135deg, #4ecdc4 0%, #1a535c 100%);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(26, 83, 92, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .note-tag:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(26, 83, 92, 0.25);
+        }
+
+        .scroll-indicator {
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                display: block;
+            }
+            
+            .timeline-container {
+                padding: 20px 10px;
+            }
+            
+            .day-card {
+                min-width: 260px;
+            }
+            
+            .note-title {
+                font-size: 28px;
+            }
+            
+            .module-title, .budget-title, .choice-title {
+                font-size: 20px;
+            }
+            
+            .day-marker {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="note-card">
+        <div class="note-header">
+            <h1 class="note-title">🚗 模块化电动旅行</h1>
+            <p class="note-subtitle">可拆可合 · 时间自由 · 全程带充</p>
+        </div>
+        
+        <div class="scroll-indicator">👆 左右滑动查看完整时间轴</div>
+        
+        <div class="timeline-container">
+            <div class="timeline-scroll">
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-marker">D0</div>
+                        <div class="day-date">10.2 周一</div>
+                    </div>
+                    <div class="day-route">北京 → 济南</div>
+                    <div class="day-activities">📍 350km / 4h<br>🏞️ 趵突泉+曲水亭街午市<br>☕ 黑虎泉打水喝咖啡</div>
+                    <div class="charging-info">
+                        <div class="charging-title">住宿充电</div>
+                        <div class="charging-details">济南西站亚朵<br>地面40个充电桩，免费停</div>
+                    </div>
+                </div>
+                
+                <div class="day-card optional">
+                    <div class="day-header">
+                        <div class="day-marker">D1</div>
+                        <div class="day-date">10.3 周二</div>
+                    </div>
+                    <div class="day-route">济南 → 连云港</div>
+                    <div class="day-activities">📍 320km / 3.5h<br>🚠 海上云台山缆车看黄海<br>🦞 盐河巷海鲜烧烤</div>
+                    <div class="charging-info">
+                        <div class="charging-title">住宿充电</div>
+                        <div class="charging-details">苏宁索菲特<br>地下120kW桩×8</div>
+                    </div>
+                </div>
+                
+                <div class="day-card optional">
+                    <div class="day-header">
+                        <div class="day-marker">D2</div>
+                        <div class="day-date">10.4 周三</div>
+                    </div>
+                    <div class="day-route">连云港 → 南京</div>
+                    <div class="day-activities">📍 260km / 3h<br>🌊 玄武湖环湖自驾道<br>🍜 老门东小吃夜市</div>
+                    <div class="charging-info">
+                        <div class="charging-title">住宿充电</div>
+                        <div class="charging-details">夫子庙亚朵<br>地库蔚来500kW</div>
+                    </div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-marker">D3</div>
+                        <div class="day-date">10.5 周四</div>
+                    </div>
+                    <div class="day-route">南京 → 黄山汤口</div>
+                    <div class="day-activities">📍 300km / 3.5h<br>⚠️ 必须到达日<br>♨️ 晚上泡温泉放松</div>
+                    <div class="charging-info">
+                        <div class="charging-title">住宿充电</div>
+                        <div class="charging-details">汤口「醉温泉」酒店<br>院内60kW桩×6，含温泉</div>
+                    </div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-marker">D4</div>
+                        <div class="day-date">10.6 周五</div>
+                    </div>
+                    <div class="day-route">黄山全天爬山</div>
+                    <div class="day-activities">🚡 缆车上行8min<br>🏔️ 始信峰-北海-西海大峡谷<br>📸 迎客松打卡</div>
+                    <div class="charging-info">
+                        <div class="charging-title">下山放松</div>
+                        <div class="charging-details">全程5-6h，台阶不多<br>回酒店泡温泉，早点睡</div>
+                    </div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-marker">D5</div>
+                        <div class="day-date">10.7 周六</div>
+                    </div>
+                    <div class="day-route">汤口 → 宏村 → 千岛湖</div>
+                    <div class="day-activities">📍 120km / 2h<br>🏘️ 宏村徽派水墨1h<br>🏨 下午到千岛湖躺平</div>
+                    <div class="charging-info">
+                        <div class="charging-title">途中充电</div>
+                        <div class="charging-details">宏村停车场60kW<br>千岛湖公寓地面桩免费</div>
+                    </div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-marker">D6</div>
+                        <div class="day-date">10.8 周日</div>
+                    </div>
+                    <div class="day-route">千岛湖躺平</div>
+                    <div class="day-activities">🛥️ 可选月光岛游船2h<br>🏊 酒店泳池+骑行绿道<br>🐟 好东家鱼头汤</div>
+                    <div class="charging-info">
+                        <div class="charging-title">继续充电</div>
+                        <div class="charging-details">酒店桩随时补电<br>准备明天出发</div>
+                    </div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-marker">D7</div>
+                        <div class="day-date">10.9 周一</div>
+                    </div>
+                    <div class="day-route">千岛湖 → 上海</div>
+                    <div class="day-activities">📍 220km / 2.5h<br>🎵 19:30演唱会<br>☕ 下午武康路-安福路</div>
+                    <div class="charging-info">
+                        <div class="charging-title">到上海充电</div>
+                        <div class="charging-details">虹桥英迪格地库<br>60kW桩×6，住客免费</div>
+                    </div>
+                </div>
+                
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-marker">D8</div>
+                        <div class="day-date">10.10 周二</div>
+                    </div>
+                    <div class="day-route">上海 → 北京</div>
+                    <div class="day-activities">🚗 方案A：自驾05:30出发<br>🚄 方案B：高铁+托运<br>📍 1200km / 12h</div>
+                    <div class="charging-info">
+                        <div class="charging-title">两种选择</div>
+                        <div class="charging-details">A：三段快充19:30到京<br>B：G4高铁08:05-12:28</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-section">
+            <h3 class="module-title">🧩 模块化拆解</h3>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon">🚄</div>
+                        <div class="module-name">时间紧张版</div>
+                    </div>
+                    <div class="module-details">直接删掉连云港/南京模块，把D1-D2合并成「济南→黄山」一段700km/7h，中途合肥午休充电，当晚照样到汤口</div>
+                    <div class="module-options">
+                        <span class="option-tag">节省2天</span>
+                        <span class="option-tag">驾驶日4天</span>
+                    </div>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon">🛣️</div>
+                        <div class="module-name">极速版</div>
+                    </div>
+                    <div class="module-details">D0出发当天直接杀到南京（900km/9h，中间济南午休），D1南京躺一天，D2再去黄山，依旧轻松</div>
+                    <div class="module-options">
+                        <span class="option-tag">当天900km</span>
+                        <span class="option-tag">多一天躺平</span>
+                    </div>
+                </div>
+                
+                <div class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon">🏛️</div>
+                        <div class="module-name">加扬州版</div>
+                    </div>
+                    <div class="module-details">把D2晚上改住扬州（连云港→扬州180km/2h），D3上午瘦西湖，下午再奔黄山，多1h而已</div>
+                    <div class="module-options">
+                        <span class="option-tag">+瘦西湖</span>
+                        <span class="option-tag">只多1h</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="choice-section">
+            <h3 class="choice-title">🎯 最后一段怎么回京？</h3>
+            <div class="choice-cards">
+                <div class="choice-card">
+                    <div class="choice-header">
+                        <div class="choice-icon">🚗</div>
+                        <div class="choice-name">方案A：自驾直杀</div>
+                    </div>
+                    <div class="choice-details">
+                        05:30出发，三段快充（常州-徐州-德州），19:30到京<br>
+                        驾驶日算第6天，仍≤你容忍的「最多5-6天奔波」
+                    </div>
+                    <div class="choice-tags">
+                        <span class="choice-tag">省钱</span>
+                        <span class="choice-tag">驾驶6天</span>
+                        <span class="choice-tag">当天到家</span>
+                    </div>
+                </div>
+                
+                <div class="choice-card">
+                    <div class="choice-header">
+                        <div class="choice-icon">🚄</div>
+                        <div class="choice-name">方案B：人车分离</div>
+                    </div>
+                    <div class="choice-details">
+                        把车交给虹桥「一嗨托运」，人坐G4 08:05-12:28回京<br>
+                        当天车到，加收1400元托运，驾驶日降到5天
+                    </div>
+                    <div class="choice-tags">
+                        <span class="choice-tag">省力</span>
+                        <span class="choice-tag">驾驶5天</span>
+                        <span class="choice-tag">+1400元</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="budget-section">
+            <h3 class="budget-title">💰 费用预算</h3>
+            <div class="budget-grid">
+                <div class="budget-item">
+                    <div class="budget-label">高速费</div>
+                    <div class="budget-value">¥1,050</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">充电费</div>
+                    <div class="budget-value">¥320</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">住宿费</div>
+                    <div class="budget-value">¥3,000</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">门票</div>
+                    <div class="budget-value">¥648</div>
+                </div>
+                <div class="budget-item">
+                    <div class="budget-label">餐饮</div>
+                    <div class="budget-value">¥2,250</div>
+                </div>
+                <div class="budget-item budget-total">
+                    <div class="budget-label">合计</div>
+                    <div class="budget-value">¥7,268</div>
+                    <small>人均约3.6k</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="note-tags">
+            <span class="note-tag">#电动汽车</span>
+            <span class="note-tag">#模块化旅行</span>
+            <span class="note-tag">#黄山自驾游</span>
+            <span class="note-tag">#千岛湖</span>
+            <span class="note-tag">#纯电SUV</span>
+            <span class="note-tag">#旅行攻略</span>
+            <span class="note-tag">#人车托运</span>
+        </div>
+    </div>
+    
+    <script>
+        // 时间轴滚动指示器
+        const timelineContainer = document.querySelector('.timeline-container');
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        
+        if (timelineContainer.scrollWidth > timelineContainer.clientWidth) {
+            scrollIndicator.style.display = 'block';
+        }
+        
+        // 模块卡片点击效果
+        document.querySelectorAll('.module-card, .choice-card, .day-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+        
+        // 可选模块提示
+        document.querySelectorAll('.day-card.optional').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.opacity = '1';
+                this.style.borderColor = '#1a535c';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.opacity = '0.85';
+                this.style.borderColor = '#4ecdc4';
+            });
+        });
+        
+        // 数字动画
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.textContent = value.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // 页面加载动画
+        window.addEventListener('load', () => {
+            // 预算数字动画
+            const budgetValues = document.querySelectorAll('.budget-value');
+            budgetValues.forEach(stat => {
+                const text = stat.textContent;
+                const number = parseInt(text.replace(/[^\d]/g, ''));
+                if (!isNaN(number) && number > 0) {
+                    animateValue(stat, 0, number, 1500);
+                    setTimeout(() => {
+                        stat.textContent = text;
+                    }, 1500);
+                }
+            });
+            
+            // 卡片依次出现
+            const cards = document.querySelectorAll('.day-card, .module-card, .choice-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+        
+        // 标签点击效果
+        document.querySelectorAll('.note-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
