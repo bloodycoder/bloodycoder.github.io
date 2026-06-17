@@ -1,0 +1,7 @@
+# Hugo local build lock/cache
+.hugo_build.lock
+resources/_gen/
+
+# OS/editor noise
+.DS_Store
+*.swp

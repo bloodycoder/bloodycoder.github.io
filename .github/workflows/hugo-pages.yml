@@ -1,0 +1,88 @@
+name: Build and publish diary
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - 'content/**'
+      - 'static/**'
+      - 'layouts/**'
+      - 'archetypes/**'
+      - 'themes/**'
+      - 'config.toml'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/hugo-pages.yml'
+  pull_request:
+    paths:
+      - 'content/**'
+      - 'static/**'
+      - 'layouts/**'
+      - 'archetypes/**'
+      - 'themes/**'
+      - 'config.toml'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/hugo-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  HUGO_VERSION: 0.118.2
+  HUGO_ENVIRONMENT: production
+  HUGO_ENV: production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Build site
+        run: hugo --gc --minify
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+  deploy:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
