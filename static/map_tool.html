@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Excel Join</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2933;
+      --muted: #697586;
+      --line: #d9e0e8;
+      --soft: #f3f6f8;
+      --paper: #fbfcf8;
+      --accent: #0f766e;
+      --accent-ink: #ffffff;
+      --warn: #b45309;
+      --bad: #b42318;
+      --good: #067647;
+      --focus: #f59e0b;
+      --shadow: 0 18px 50px rgba(31, 41, 51, 0.10);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(15, 118, 110, 0.08) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(15, 118, 110, 0.06) 1px, transparent 1px),
+        var(--paper);
+      background-size: 32px 32px;
+      color: var(--ink);
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 24px;
+      padding: 10px 0 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 52px);
+      line-height: 0.98;
+      letter-spacing: 0;
+      max-width: 780px;
+    }
+
+    .subtitle {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 720px;
+    }
+
+    .status-pill {
+      min-width: 168px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.68);
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .status-pill strong {
+      display: block;
+      color: var(--ink);
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.74);
+      padding: 12px;
+      min-height: 72px;
+    }
+
+    .step[aria-current="step"] {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 2px rgba(15, 118, 110, 0.16);
+    }
+
+    .step-num {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      margin-bottom: 8px;
+      background: var(--ink);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .step[aria-current="step"] .step-num {
+      background: var(--accent);
+    }
+
+    .step-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    main {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      display: none;
+      padding: clamp(18px, 3vw, 32px);
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .hint {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+      max-width: 680px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      padding: 0 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--focus) 42%, transparent);
+      outline-offset: 2px;
+    }
+
+    .primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    .danger {
+      color: var(--bad);
+    }
+
+    .paste-area {
+      width: 100%;
+      min-height: 330px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      padding: 14px;
+      line-height: 1.45;
+      white-space: pre;
+      overflow: auto;
+      tab-size: 4;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    input[type="number"],
+    select {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      padding: 0 10px;
+      width: 100%;
+    }
+
+    .checkline {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .checkline input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      padding: 12px;
+      min-height: 78px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1.1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .notice {
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      background: #fff7ed;
+      color: var(--warn);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .notice.good {
+      background: #ecfdf3;
+      color: var(--good);
+    }
+
+    .preview-wrap {
+      overflow: auto;
+      max-height: 430px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 720px;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+      max-width: 260px;
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #edf4f2;
+      z-index: 1;
+      color: var(--ink);
+    }
+
+    .output {
+      min-height: 260px;
+      margin-top: 14px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: min(100vw - 20px, 1180px);
+        padding-top: 14px;
+      }
+
+      header,
+      .grid,
+      .steps,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-head {
+        display: block;
+      }
+
+      .status-pill {
+        margin-top: 14px;
+      }
+
+      .toolbar,
+      .actions {
+        align-items: stretch;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div>
+        <h1>Excel 表格 Join</h1>
+            <p class="subtitle">从 Excel 复制表 1 和表 2，按指定列匹配，把表 2 除 join 列外的所有列追加到表 1。所有处理都在浏览器本地完成。</p>
+      </div>
+      <div class="status-pill" aria-live="polite">
+        当前结果
+        <strong id="matchedCount">0</strong>
+        <span id="matchedLabel">行匹配</span>
+      </div>
+    </header>
+
+    <nav class="steps" aria-label="处理步骤">
+      <div class="step" data-step-indicator="1" aria-current="step">
+        <span class="step-num">1</span>
+        <span class="step-title">粘贴表 1</span>
+      </div>
+      <div class="step" data-step-indicator="2">
+        <span class="step-num">2</span>
+        <span class="step-title">粘贴表 2</span>
+      </div>
+      <div class="step" data-step-indicator="3">
+        <span class="step-num">3</span>
+        <span class="step-title">选择 Join 列</span>
+      </div>
+      <div class="step" data-step-indicator="4">
+        <span class="step-num">4</span>
+        <span class="step-title">复制结果</span>
+      </div>
+    </nav>
+
+    <main>
+      <section class="panel active" data-panel="1">
+        <div class="panel-head">
+          <div>
+            <h2>表 1</h2>
+            <p class="hint">直接从 Excel 选择区域复制，再粘贴到下面。表 1 会作为主表，结果行数保持和表 1 一致。</p>
+          </div>
+          <button class="danger" type="button" data-clear="table1">清空</button>
+        </div>
+        <textarea id="table1Input" class="paste-area" spellcheck="false" placeholder="在这里粘贴表 1"></textarea>
+        <div class="toolbar">
+          <span class="small" id="table1Summary">0 行，0 列</span>
+          <div class="actions">
+            <button class="primary" type="button" data-next="2">Next</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="2">
+        <div class="panel-head">
+          <div>
+            <h2>表 2</h2>
+            <p class="hint">表 2 会被建立成索引；如果 join key 重复，默认使用最后出现的那一行，并在结果页提示重复数量。</p>
+          </div>
+          <button class="danger" type="button" data-clear="table2">清空</button>
+        </div>
+        <textarea id="table2Input" class="paste-area" spellcheck="false" placeholder="在这里粘贴表 2"></textarea>
+        <div class="toolbar">
+          <span class="small" id="table2Summary">0 行，0 列</span>
+          <div class="actions">
+            <button type="button" data-prev="1">Back</button>
+            <button class="primary" type="button" data-next="3">Next</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="3">
+        <div class="panel-head">
+          <div>
+            <h2>Join 设置</h2>
+            <p class="hint">列号从 1 开始。比如“表 1 的列 5”和“表 2 的列 2”，就分别填 5 和 2。</p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="table1Key">表 1 join 列</label>
+            <input id="table1Key" type="number" min="1" step="1" value="1">
+          </div>
+          <div class="field">
+            <label for="table2Key">表 2 join 列</label>
+            <input id="table2Key" type="number" min="1" step="1" value="1">
+          </div>
+          <div class="field">
+            <label for="caseMode">匹配方式</label>
+            <select id="caseMode">
+              <option value="trim-lower">去空格 + 忽略大小写</option>
+              <option value="trim">只去前后空格</option>
+              <option value="exact">完全一致</option>
+            </select>
+          </div>
+          <label class="checkline">
+            <input id="skipTable2Key" type="checkbox" checked>
+            追加表 2 时排除它的 join 列
+          </label>
+          <label class="checkline">
+            <input id="table1Header" type="checkbox">
+            表 1 第一行是标题
+          </label>
+          <label class="checkline">
+            <input id="table2Header" type="checkbox">
+            表 2 第一行是标题
+          </label>
+        </div>
+
+        <div class="toolbar">
+          <span class="small" id="joinHint">等待生成</span>
+          <div class="actions">
+            <button type="button" data-prev="2">Back</button>
+            <button class="primary" type="button" id="runJoin">Join</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="4">
+        <div class="panel-head">
+          <div>
+            <h2>结果</h2>
+            <p class="hint">上面的预览只显示前 50 行；下面的文本框包含完整结果，复制后可直接粘回 Excel。</p>
+          </div>
+        </div>
+
+        <div class="stats" aria-live="polite">
+          <div class="stat"><strong id="rowsStat">0</strong><span>表 1 行数</span></div>
+          <div class="stat"><strong id="matchedStat">0</strong><span>匹配行数</span></div>
+          <div class="stat"><strong id="missingStat">0</strong><span>未匹配行数</span></div>
+          <div class="stat"><strong id="duplicateStat">0</strong><span>表 2 重复 key</span></div>
+        </div>
+
+        <div id="message" class="notice good">等待结果。</div>
+        <div class="toolbar">
+          <span class="small" id="resultSummary">0 行，0 列</span>
+          <div class="actions">
+            <button type="button" data-prev="3">Back</button>
+            <button type="button" id="copyResult">复制结果</button>
+            <button class="primary" type="button" id="downloadCsv">下载 CSV</button>
+          </div>
+        </div>
+
+        <h2 style="margin-top: 24px; font-size: 22px;">预览</h2>
+        <div id="preview" class="preview-wrap" aria-label="结果预览"></div>
+        <textarea id="resultOutput" class="paste-area output" spellcheck="false" readonly></textarea>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      table1: [],
+      table2: [],
+      result: [],
+      stats: {
+        matched: 0,
+        missing: 0,
+        duplicates: 0
+      }
+    };
+
+    const el = {
+      table1Input: document.querySelector("#table1Input"),
+      table2Input: document.querySelector("#table2Input"),
+      table1Summary: document.querySelector("#table1Summary"),
+      table2Summary: document.querySelector("#table2Summary"),
+      table1Key: document.querySelector("#table1Key"),
+      table2Key: document.querySelector("#table2Key"),
+      caseMode: document.querySelector("#caseMode"),
+      skipTable2Key: document.querySelector("#skipTable2Key"),
+      table1Header: document.querySelector("#table1Header"),
+      table2Header: document.querySelector("#table2Header"),
+      joinHint: document.querySelector("#joinHint"),
+      runJoin: document.querySelector("#runJoin"),
+      rowsStat: document.querySelector("#rowsStat"),
+      matchedStat: document.querySelector("#matchedStat"),
+      missingStat: document.querySelector("#missingStat"),
+      duplicateStat: document.querySelector("#duplicateStat"),
+      matchedCount: document.querySelector("#matchedCount"),
+      matchedLabel: document.querySelector("#matchedLabel"),
+      resultSummary: document.querySelector("#resultSummary"),
+      message: document.querySelector("#message"),
+      preview: document.querySelector("#preview"),
+      resultOutput: document.querySelector("#resultOutput"),
+      copyResult: document.querySelector("#copyResult"),
+      downloadCsv: document.querySelector("#downloadCsv")
+    };
+
+    function parseTable(raw) {
+      const text = raw.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+      if (!text.trim()) return [];
+      const rows = text.split("\n");
+      if (rows[rows.length - 1] === "") rows.pop();
+      return rows.map((line) => line.split("\t"));
+    }
+
+    function tableShape(rows) {
+      const width = rows.reduce((max, row) => Math.max(max, row.length), 0);
+      return { rows: rows.length, width };
+    }
+
+    function normalize(value, mode) {
+      const raw = value == null ? "" : String(value);
+      if (mode === "exact") return raw;
+      const trimmed = raw.trim();
+      if (mode === "trim") return trimmed;
+      return trimmed.toLowerCase();
+    }
+
+    function toTsv(rows) {
+      return rows.map((row) => row.map((cell) => String(cell ?? "")).join("\t")).join("\n");
+    }
+
+    function csvEscape(value) {
+      const text = String(value ?? "");
+      if (/[",\r\n]/.test(text)) return '"' + text.replace(/"/g, '""') + '"';
+      return text;
+    }
+
+    function toCsv(rows) {
+      return rows.map((row) => row.map(csvEscape).join(",")).join("\r\n");
+    }
+
+    function updateInputSummaries() {
+      state.table1 = parseTable(el.table1Input.value);
+      state.table2 = parseTable(el.table2Input.value);
+      const s1 = tableShape(state.table1);
+      const s2 = tableShape(state.table2);
+      el.table1Summary.textContent = `${s1.rows} 行，${s1.width} 列`;
+      el.table2Summary.textContent = `${s2.rows} 行，${s2.width} 列`;
+      el.joinHint.textContent = `表 1：${s1.rows} 行 / ${s1.width} 列；表 2：${s2.rows} 行 / ${s2.width} 列`;
+    }
+
+    function setStep(step) {
+      document.querySelectorAll(".panel").forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.panel === String(step));
+      });
+      document.querySelectorAll("[data-step-indicator]").forEach((item) => {
+        if (item.dataset.stepIndicator === String(step)) {
+          item.setAttribute("aria-current", "step");
+        } else {
+          item.removeAttribute("aria-current");
+        }
+      });
+      updateInputSummaries();
+    }
+
+    function buildIndex(rows, keyIndex, mode) {
+      const index = new Map();
+      let duplicates = 0;
+      rows.forEach((row) => {
+        const key = normalize(row[keyIndex], mode);
+        if (!key) return;
+        if (index.has(key)) duplicates += 1;
+        index.set(key, row);
+      });
+      return { index, duplicates };
+    }
+
+    function joinTables() {
+      updateInputSummaries();
+      const t1Key = Number(el.table1Key.value) - 1;
+      const t2Key = Number(el.table2Key.value) - 1;
+      const s1 = tableShape(state.table1);
+      const s2 = tableShape(state.table2);
+
+      if (!state.table1.length || !state.table2.length) {
+        showMessage("请先粘贴表 1 和表 2。", "warn");
+        return false;
+      }
+      if (!Number.isInteger(t1Key) || t1Key < 0 || t1Key >= s1.width) {
+        showMessage(`表 1 join 列必须在 1 到 ${s1.width} 之间。`, "warn");
+        return false;
+      }
+      if (!Number.isInteger(t2Key) || t2Key < 0 || t2Key >= s2.width) {
+        showMessage(`表 2 join 列必须在 1 到 ${s2.width} 之间。`, "warn");
+        return false;
+      }
+
+      const mode = el.caseMode.value;
+      const table1HasHeader = el.table1Header.checked;
+      const table2HasHeader = el.table2Header.checked;
+      const table1Head = table1HasHeader ? state.table1[0] : null;
+      const table2Head = table2HasHeader ? state.table2[0] : null;
+      const table1Data = table1HasHeader ? state.table1.slice(1) : state.table1;
+      const table2Data = table2HasHeader ? state.table2.slice(1) : state.table2;
+      const { index, duplicates } = buildIndex(table2Data, t2Key, mode);
+      const appendWidth = el.skipTable2Key.checked ? Math.max(s2.width - 1, 0) : s2.width;
+      let matched = 0;
+      let missing = 0;
+
+      state.result = table1Data.map((row) => {
+        const key = normalize(row[t1Key], mode);
+        const matchedRow = key ? index.get(key) : null;
+        if (matchedRow) {
+          matched += 1;
+          const appendCells = el.skipTable2Key.checked
+            ? matchedRow.filter((_, idx) => idx !== t2Key)
+            : matchedRow.slice();
+          while (appendCells.length < appendWidth) appendCells.push("");
+          return row.concat(appendCells);
+        }
+        missing += 1;
+        return row.concat(Array(appendWidth).fill(""));
+      });
+
+      if (table1Head || table2Head) {
+        const leftHead = table1Head || Array(s1.width).fill("");
+        const rightHead = table2Head || Array(s2.width).fill("");
+        const appendHead = el.skipTable2Key.checked
+          ? rightHead.filter((_, idx) => idx !== t2Key)
+          : rightHead.slice();
+        while (appendHead.length < appendWidth) appendHead.push("");
+        state.result.unshift(leftHead.concat(appendHead));
+      }
+
+      state.stats = { matched, missing, duplicates };
+      renderResult();
+      return true;
+    }
+
+    function showMessage(text, type) {
+      el.message.textContent = text;
+      el.message.className = type === "good" ? "notice good" : "notice";
+    }
+
+    function renderResult() {
+      const shape = tableShape(state.result);
+      el.rowsStat.textContent = String(state.stats.matched + state.stats.missing);
+      el.matchedStat.textContent = String(state.stats.matched);
+      el.missingStat.textContent = String(state.stats.missing);
+      el.duplicateStat.textContent = String(state.stats.duplicates);
+      el.matchedCount.textContent = String(state.stats.matched);
+      el.matchedLabel.textContent = "行匹配";
+      el.resultSummary.textContent = `${shape.rows} 行，${shape.width} 列`;
+      el.resultOutput.value = toTsv(state.result);
+
+      const duplicateText = state.stats.duplicates
+        ? `；表 2 有 ${state.stats.duplicates} 个重复 key，已使用最后出现的行`
+        : "";
+      showMessage(`完成：${state.stats.matched} 行匹配，${state.stats.missing} 行未匹配${duplicateText}。`, "good");
+      renderPreview(state.result.slice(0, 50));
+    }
+
+    function renderPreview(rows) {
+      if (!rows.length) {
+        el.preview.innerHTML = "";
+        return;
+      }
+      const width = tableShape(rows).width;
+      const head = Array.from({ length: width }, (_, idx) => `<th>列 ${idx + 1}</th>`).join("");
+      const body = rows.map((row) => {
+        const cells = Array.from({ length: width }, (_, idx) => {
+          const text = escapeHtml(row[idx] ?? "");
+          return `<td>${text}</td>`;
+        }).join("");
+        return `<tr>${cells}</tr>`;
+      }).join("");
+      el.preview.innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function copyResult() {
+      if (!state.result.length) return;
+      const text = toTsv(state.result);
+      try {
+        await navigator.clipboard.writeText(text);
+        showMessage("已复制完整结果，可直接粘贴回 Excel。", "good");
+      } catch (_err) {
+        el.resultOutput.focus();
+        el.resultOutput.select();
+        document.execCommand("copy");
+        showMessage("已选中结果文本；如果没有自动复制，请手动复制。", "warn");
+      }
+    }
+
+    function downloadCsv() {
+      if (!state.result.length) return;
+      const blob = new Blob(["\ufeff" + toCsv(state.result)], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "joined-output.csv";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    document.querySelectorAll("[data-next]").forEach((button) => {
+      button.addEventListener("click", () => setStep(button.dataset.next));
+    });
+
+    document.querySelectorAll("[data-prev]").forEach((button) => {
+      button.addEventListener("click", () => setStep(button.dataset.prev));
+    });
+
+    document.querySelectorAll("[data-clear]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const target = button.dataset.clear === "table1" ? el.table1Input : el.table2Input;
+        target.value = "";
+        target.focus();
+        updateInputSummaries();
+      });
+    });
+
+    [el.table1Input, el.table2Input].forEach((input) => {
+      input.addEventListener("input", updateInputSummaries);
+    });
+
+    el.runJoin.addEventListener("click", () => {
+      if (joinTables()) setStep(4);
+    });
+    el.copyResult.addEventListener("click", copyResult);
+    el.downloadCsv.addEventListener("click", downloadCsv);
+
+    updateInputSummaries();
+  </script>
+</body>
+</html>
