@@ -1,38 +1,104 @@
-baseurl = "https://bloodycoder.github.io/"
-languageCode = "en-us"
-theme = "terminal"
-paginate = 5
+baseURL = "https://bloodycoder.github.io/"
+languageCode = "zh-cn"
+defaultContentLanguage = "zh"
+title = "bloodycoder"
+theme = "PaperMod"
 publishDir = "docs"
-[params]
-  contentTypeName = "posts"
-  themeColor = "orange"
-  showMenuItems = 2
-  fullWidthTheme = false
-  centerTheme = false
+hasCJKLanguage = true
+enableRobotsTXT = true
+enableEmoji = true
+mainSections = ["posts"]
+summaryLength = 120
 
 [languages]
-  [languages.en]
-    title = "Terminal"
-    subtitle = "A simple, retro theme for Hugo"
-    keywords = ""
-    copyright = ""
-    menuMore = "Show more"
-    readMore = "Read more"
-    readOtherPosts = "Read other posts"
+  [languages.zh]
+    languageName = "中文"
+    languageCode = "zh-cn"
+    weight = 1
 
-    [languages.en.params.logo]
-      logoText = "Terminal"
-      logoHomeLink = "/"
+[pagination]
+  pagerSize = 5
 
-    [languages.en.menu]
-      [[languages.en.menu.main]]
-        identifier = "about"
-        name = "About"
-        url = "/about"
+[minify]
+  disableXML = true
+  minifyOutput = true
 
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[params]
+  env = "production"
+  description = "bloodycoder 的个人日记与技术随笔"
+  author = "bloodycoder"
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowRssButtonInSectionTermList = true
+  ShowPageNums = true
+  ShowToc = false
+  TocOpen = true
+  comments = false
+  DateFormat = "2006-01-02"
+
+  [params.homeInfoParams]
+    Title = "bloodycoder"
+    Content = "个人日记、技术随笔和生活记录。"
+
+  [[params.socialIcons]]
+    name = "github"
+    title = "GitHub"
+    url = "https://github.com/bloodycoder"
+
+  [params.assets]
+    disableHLJS = true
+
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archives/"
+    weight = 20
+
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 30
+
+  [[menu.main]]
+    identifier = "search"
+    name = "搜索"
+    url = "/search/"
+    weight = 40
+
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 50
 
 [markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+  [markup.highlight]
+    noClasses = false
+
   [markup.tableOfContents]
+    startLevel = 1
     endLevel = 5
     ordered = false
-    startLevel = 1

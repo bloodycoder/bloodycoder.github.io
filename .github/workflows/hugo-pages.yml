@@ -42,7 +42,7 @@ defaults:
     shell: bash
 
 env:
-  HUGO_VERSION: 0.118.2
+  HUGO_VERSION: 0.146.0
   HUGO_ENVIRONMENT: production
   HUGO_ENV: production
 
