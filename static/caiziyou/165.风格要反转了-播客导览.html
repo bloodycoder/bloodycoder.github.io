@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f2e9">
+  <meta name="description" content="《风格要反转了》播客导览：可听的摘要、历史时间线、投资者情绪四阶段与访谈重点。">
+  <title>风格要反转了｜播客导览</title>
+  <style>
+    :root { color-scheme: light; --paper: #f6f2e9; --ink: #252c2a; --muted: #68716b; --line: #d9d6ca; --accent: #a74835; --forest: #254b41; --soft: #ebe6d9; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.8; }
+    a { color: inherit; text-underline-offset: .25em; }
+    button { font: inherit; cursor: pointer; }
+    button:focus-visible, a:focus-visible, audio:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    .wrap { width: min(1080px, calc(100% - 44px)); margin-inline: auto; }
+    .topline { display: flex; justify-content: space-between; gap: 16px; align-items: center; border-bottom: 1px solid var(--line); padding: 16px 0; color: var(--muted); font-size: 12px; letter-spacing: .13em; }
+    .topline span:first-child { color: var(--forest); font-weight: 700; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: clamp(28px, 6vw, 100px); align-items: end; padding: clamp(48px, 8vw, 108px) 0 56px; }
+    .eyebrow, .section-index { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .18em; }
+    h1, h2, h3, .pullquote { font-family: "Songti SC", "Noto Serif CJK SC", "SimSun", serif; }
+    h1 { margin: 18px 0 24px; font-size: clamp(48px, 8vw, 100px); font-weight: 700; letter-spacing: -.055em; line-height: 1.15; }
+    .deck { max-width: 650px; margin: 0; font-size: clamp(17px, 2.25vw, 23px); line-height: 1.7; }
+    .hero-aside { border-top: 4px solid var(--forest); padding-top: 22px; font-size: 14px; color: var(--muted); }
+    .hero-aside strong { display: block; color: var(--ink); font-size: 16px; margin-bottom: 10px; }
+    .hero-aside p { margin: 0 0 14px; }
+    .hero-aside a { color: var(--accent); font-weight: 700; }
+    .player { background: var(--forest); color: #f8f3e9; padding: clamp(24px, 4vw, 42px); margin-bottom: 26px; }
+    .player-heading { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 18px; align-items: baseline; margin-bottom: 22px; }
+    .player-heading strong { font-family: "Songti SC", "SimSun", serif; font-size: 25px; }
+    .player-heading span, .player-note { font-size: 13px; color: #c6d5ca; }
+    audio { width: 100%; display: block; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 10px; }
+    .controls button, .read-controls button { padding: 8px 13px; border: 1px solid #9bb3a4; background: transparent; color: inherit; border-radius: 3px; }
+    .controls button:hover { background: #39685a; }
+    .player-note { margin: 8px 0 0; line-height: 1.6; }
+    nav { display: flex; flex-wrap: wrap; gap: 10px 22px; padding: 16px 0 42px; font-size: 14px; border-bottom: 1px solid var(--line); }
+    nav a { text-decoration: none; color: var(--forest); font-weight: 700; }
+    nav a:hover { text-decoration: underline; }
+    .section { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 28px; padding: 72px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 20px; }
+    .section-label { padding-top: 12px; }
+    .section-body { max-width: 760px; }
+    h2 { font-size: clamp(30px, 4vw, 46px); line-height: 1.25; margin: 0 0 28px; letter-spacing: -.035em; }
+    h3 { font-size: 22px; line-height: 1.4; margin: 0 0 10px; }
+    p { margin: 0 0 18px; }
+    .lede { font-size: 19px; color: var(--forest); font-weight: 600; }
+    .read-box { padding: 26px 30px 20px; background: var(--soft); border-top: 1px solid var(--forest); }
+    .read-box p { font-size: 17px; line-height: 2; }
+    .read-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; color: var(--forest); }
+    .read-controls button { border-color: var(--forest); font-size: 14px; }
+    .read-controls button:hover { background: #d9ddce; }
+    #speech-status { color: var(--muted); font-size: 13px; }
+    .timeline { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+    .timeline li { display: grid; grid-template-columns: minmax(104px, 145px) 1fr; gap: 20px; padding: 21px 0; border-bottom: 1px solid var(--line); }
+    .timeline time { color: var(--accent); font-size: 14px; font-weight: 700; line-height: 1.7; }
+    .timeline p { margin: 0; }
+    .timeline strong { color: var(--forest); }
+    .timeline-note, .source-note { color: var(--muted); font-size: 13px; margin-top: 17px; }
+    .stages { counter-reset: stages; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
+    .stage { border-top: 1px solid var(--line); padding: 22px 0 18px; }
+    .stage::before { counter-increment: stages; content: "0" counter(stages); display: block; margin-bottom: 14px; color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: .1em; }
+    .stage p { color: var(--muted); }
+    .keypoints { margin: 0; padding: 0; list-style: none; }
+    .keypoints li { padding: 22px 0 20px; border-top: 1px solid var(--line); }
+    .keypoints strong { display: block; color: var(--forest); font-size: 18px; margin-bottom: 5px; }
+    .keypoints p { margin: 0; }
+    .pullquote { font-size: clamp(22px, 3.4vw, 34px); line-height: 1.65; color: var(--forest); margin: 28px 0; }
+    .contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .contrast > div { border-top: 2px solid var(--forest); padding-top: 18px; }
+    .contrast > div + div { border-top-color: var(--accent); }
+    .contrast p { font-size: 15px; }
+    footer { padding: 38px 0 65px; font-size: 13px; color: var(--muted); }
+    footer a { color: var(--forest); }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; padding-top: 50px; }
+      .hero-aside { max-width: 500px; }
+      .section { grid-template-columns: 1fr; gap: 12px; padding: 54px 0; }
+      .section-label { padding: 0; }
+      .stages, .contrast { grid-template-columns: 1fr; }
+      .timeline li { grid-template-columns: 1fr; gap: 3px; }
+      .read-box { padding: 22px 19px 12px; }
+      .topline { letter-spacing: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      body { background: white; }
+      .wrap { width: 100%; }
+      .hero { padding: 20px 0; }
+      .player, .controls, .read-controls, nav { display: none; }
+      .section { padding: 24px 0; break-inside: avoid; }
+      h1 { font-size: 52px; }
+    }
+  </style>
+</head>
+<body id="top">
+  <div class="wrap">
+    <header class="topline"><span>播客导览 / EP. 165</span><span>访谈：小罗 × 杨培鸿　·　原音约 83 分 53 秒</span></header>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">一份可以边听边看的节目笔记</div>
+        <h1>风格要<br>反转了<span style="color:var(--accent)">。</span></h1>
+        <p class="deck">从 2015 年创业板，到 2021 年茅指数，再回到本期讨论的成长风格调整：泡沫退潮时，人会怎样一步步改变想法？</p>
+      </div>
+      <aside class="hero-aside">
+        <strong>从这里开始听</strong>
+        <p>时间线按历史事件排序，不是音频章节。想快速进入主题，可以先听下面的摘要朗读，再播放完整访谈。</p>
+        <a href="#quick-listen">跳到短摘要 ↓</a>
+      </aside>
+    </div>
+
+    <section class="player" aria-label="原始播客播放器">
+      <div class="player-heading"><strong>播放完整访谈</strong><span>原音 · 约 1 小时 24 分钟</span></div>
+      <audio id="episode" controls preload="metadata" src="https://picardxietest-1251807949.cos.ap-nanjing.myqcloud.com/caiziyou/165-style-reversal.mp3">你的浏览器不支持音频播放。请<a href="https://picardxietest-1251807949.cos.ap-nanjing.myqcloud.com/caiziyou/165-style-reversal.mp3">打开 COS 音频</a>。</audio>
+      <div class="controls" aria-label="播放辅助控制">
+        <button type="button" id="backward">−15 秒</button>
+        <button type="button" id="forward">+15 秒</button>
+        <button type="button" id="speed">倍速 1×</button>
+        <button type="button" id="resume" hidden>继续上次收听</button>
+      </div>
+      <p class="player-note" id="player-status" aria-live="polite">播放进度仅保存在当前浏览器。如无法播放，请<a href="https://picardxietest-1251807949.cos.ap-nanjing.myqcloud.com/caiziyou/165-style-reversal.mp3">直接打开 COS 音频</a>。</p>
+    </section>
+
+    <nav aria-label="本页目录">
+      <a href="#quick-listen">三分钟听懂</a><a href="#timeline">历史时间线</a><a href="#stages">情绪四阶段</a><a href="#takeaways">重点内容</a><a href="#disagreement">两人的分歧</a>
+    </nav>
+
+    <main>
+      <section id="quick-listen" class="section" aria-labelledby="quick-title">
+        <div class="section-label"><span class="section-index">01 / 听前摘要</span></div>
+        <div class="section-body">
+          <h2 id="quick-title">先用几分钟，听懂这一期</h2>
+          <div class="read-box" id="summary-script">
+            <p>这一期从近期成长风格的调整说起。杨培鸿认为，下跌初期最大的陷阱，不只是价格跌了，而是投资者还在用原来的高点和故事判断现在：觉得这是“黄金坑”，反弹时加仓，却没有重新审视估值。</p>
+            <p>他用二〇一五年创业板举例。当年六月到七月初，指数从约四千点跌到约两千三百点；随后反弹约三成，却没有改写更长的下跌过程。到二〇一八年底，创业板又跌至约一千四百点。他把这一过程概括为四种心态：否认和侥幸、不甘和执念、疲惫和麻木、绝望和割肉。这是理解市场情绪的框架，不是必然发生的时间表。</p>
+            <p>再看二〇二一年以后茅指数的调整。讨论的核心是：公司再好，买入价格也重要。小罗补充了另一个难题：不仅可能买贵，还可能高估未来利润；原以为稳固的生意，也会发生变化。</p>
+            <p>因此两人的落脚点不完全相同。杨培鸿更强调先学会买便宜、做分散、承认自己的能力边界；小罗则强调更严格的安全边际、仓位纪律，以及持续检查对企业盈利的判断。对于当下走势，杨培鸿倾向于认为情绪尚未走到麻木阶段，但也承认短期路径难以预测。听完这一期，值得带走的不是一个确定的买卖时点，而是三个问题：现在真的便宜吗？我判断未来利润的把握有多大？如果判断错了，组合承受得住吗？</p>
+          </div>
+          <div class="read-controls">
+            <button type="button" id="read-start">▶ 朗读短摘要</button>
+            <button type="button" id="read-stop" hidden>■ 停止朗读</button>
+            <span id="speech-status" role="status">使用浏览器语音；声音和语速取决于设备。</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="timeline" class="section" aria-labelledby="timeline-title">
+        <div class="section-label"><span class="section-index">02 / 历史时间线</span></div>
+        <div class="section-body">
+          <h2 id="timeline-title">三轮行情，放到一条线上</h2>
+          <ol class="timeline">
+            <li><time datetime="2015-06">2015 年 6 月</time><p><strong>创业板高点与急跌。</strong>访谈称，6 月初创业板约 4,000 点，估值很高；6 月中旬后急跌，到 7 月 8 日约 2,300 点。</p></li>
+            <li><time datetime="2015-07">2015 年 7 月</time><p><strong>救市与大幅反弹。</strong>讨论提到政策支持、停牌及反弹；创业板从低位回升约三成。反弹容易被理解为“牛市回来”，但不等于原有风险消失。</p></li>
+            <li><time datetime="2015-08">2015 年 8 月—2016 年初</time><p><strong>反复下跌。</strong>8 月市场再度承压；2016 年初熔断期间又经历急跌。节目用这一段说明：反弹后也可能继续创新低。</p></li>
+            <li><time datetime="2018-12">2018 年底</time><p><strong>长期调整的后段。</strong>访谈回顾创业板约跌至 1,400 点，以此说明低估或跌幅很大，并不自动意味着很快见底。</p></li>
+            <li><time datetime="2021-02">2021 年 2 月起</time><p><strong>茅指数抱团松动。</strong>节目以春节后白酒等优质公司的回撤为起点：企业质地与买入价格是两回事，初期反弹也未扭转此后的调整。</p></li>
+            <li><time datetime="2022">2022—2024 年</time><p><strong>茅指数持续承压。</strong>两人谈到估值消化、盈利变化与投资者赎回的相互影响；这轮调整与 2015 年创业板的企业质量不同。</p></li>
+            <li><time>本期讨论的近期</time><p><strong>成长风格再度调整。</strong>访谈回顾此前上涨、回调与反弹，并把当前情绪描述为第一阶段末至第二阶段初；这是杨培鸿的判断，不是已经证实的市场阶段。</p></li>
+          </ol>
+          <p class="timeline-note">时间线是历史事件线，不对应音频播放位置。点位、幅度和市场阶段均为嘉宾在访谈中的回顾或判断；原稿未明确写出“本期”的年份，因此这里不推定具体年份。</p>
+        </div>
+      </section>
+
+      <section id="stages" class="section" aria-labelledby="stages-title">
+        <div class="section-label"><span class="section-index">03 / 一条心理线索</span></div>
+        <div class="section-body">
+          <h2 id="stages-title">下跌中的四种心态</h2>
+          <div class="stages">
+            <div class="stage"><h3>否认与侥幸</h3><p>把急跌看作“黄金坑”；沿用高点锚定，觉得原来的故事还在，趁反弹加仓。</p></div>
+            <div class="stage"><h3>不甘与执念</h3><p>反弹给人解套希望；一部分人继续买，一部分人逢反弹卖，行情反复拉扯。</p></div>
+            <div class="stage"><h3>疲惫与麻木</h3><p>多次期待落空，关注度和反弹力度走弱，漫长的阴跌更考验持有者。</p></div>
+            <div class="stage"><h3>绝望与割肉</h3><p>持有者最终放弃，情绪可能走向极端；但情绪极端本身也不能精确标出底部。</p></div>
+          </div>
+          <p class="source-note">这是一套访谈中的行为框架，并非每轮市场都按同样顺序、同样时长展开。</p>
+        </div>
+      </section>
+
+      <section id="takeaways" class="section" aria-labelledby="takeaways-title">
+        <div class="section-label"><span class="section-index">04 / 重点内容</span></div>
+        <div class="section-body">
+          <h2 id="takeaways-title">值得记下的五个观点</h2>
+          <ul class="keypoints">
+            <li><strong>好公司，也要有好价格。</strong><p>茅指数中的企业与 2015 年不少概念股并不相同，但优质资产在估值过高时同样可能经历长期调整。</p></li>
+            <li><strong>反弹不等于趋势反转。</strong><p>2015 年创业板的强劲反弹被用来提醒听众：跌后涨幅显著，也未必修复前期跌幅与高估值。</p></li>
+            <li><strong>“便宜”仍需辨别原因。</strong><p>杨培鸿主张先学会买便宜；同时承认行业结构性衰退可能制造价值陷阱，不能只看低估值。</p></li>
+            <li><strong>低估与分散要同时做到。</strong><p>讨论建议以足够多的标的分散风险，也要分散行业；仅有几十只股票、却集中在少数行业，分散效果可能不足。</p></li>
+            <li><strong>风险管理比猜路径更可靠。</strong><p>嘉宾认为很难预测下一次反弹或下跌的时点；更可操作的是检视估值假设、盈利判断、仓位与自身能力圈。</p></li>
+          </ul>
+          <p class="pullquote">“买得便宜”是杨培鸿反复强调的原则；小罗追问的是：便宜之后，怎样确认自己没有看错未来？</p>
+        </div>
+      </section>
+
+      <section id="disagreement" class="section" aria-labelledby="disagreement-title">
+        <div class="section-label"><span class="section-index">05 / 值得细听</span></div>
+        <div class="section-body">
+          <h2 id="disagreement-title">两人的分歧在哪里？</h2>
+          <div class="contrast">
+            <div><h3>杨培鸿的侧重</h3><p>先从显而易见的低估入手，尽量广泛分散；高估成长股一旦业绩不及预期，潜在损失可能很大。不要高估自己研究公司的能力。</p></div>
+            <div><h3>小罗的追问</h3><p>买得便宜不保证不会更便宜。企业未来利润、竞争格局也可能误判；除了低估，还需要更严格的安全边际、仓位纪律与持续复盘。</p></div>
+          </div>
+          <p>节目后半段还讨论了多策略私募案例、转债和 AH 溢价、行业分散，以及个人性格与集中投资是否匹配。这些案例用于讨论方法，不构成可复现的收益承诺。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer><p>整理依据：同目录《165.风格要反转了.docx》访谈稿；音频：《165.风格要反转了.mp3》。本文是节目导览，观点归于受访者，并非独立核实的市场数据或投资建议。</p><a href="#top" id="to-top">返回页面顶部 ↑</a></footer>
+  </div>
+  <script>
+    const audio = document.querySelector('#episode');
+    const status = document.querySelector('#player-status');
+    const resume = document.querySelector('#resume');
+    const speed = document.querySelector('#speed');
+    const speeds = [1, 1.25, 1.5, 2];
+    const progressKey = 'podcast-165-progress';
+    let lastSaved = 0;
+
+    const formatTime = seconds => `${Math.floor(seconds / 60)}分${String(Math.floor(seconds % 60)).padStart(2, '0')}秒`;
+    audio.addEventListener('loadedmetadata', () => {
+      try {
+        const saved = Number(localStorage.getItem(progressKey));
+        if (Number.isFinite(saved) && saved > 30 && saved < audio.duration - 30) {
+          resume.hidden = false;
+          resume.textContent = `继续上次收听 · ${formatTime(saved)}`;
+          resume.addEventListener('click', () => { audio.currentTime = saved; resume.hidden = true; audio.play(); }, { once: true });
+        }
+      } catch (_) {}
+    });
+    audio.addEventListener('timeupdate', () => {
+      if (Math.abs(audio.currentTime - lastSaved) < 5) return;
+      lastSaved = audio.currentTime;
+      try { localStorage.setItem(progressKey, String(audio.currentTime)); } catch (_) {}
+    });
+    audio.addEventListener('ended', () => { try { localStorage.removeItem(progressKey); } catch (_) {} });
+    audio.addEventListener('error', () => { status.textContent = '音频未加载：请检查网络连接，或通过上方链接直接打开 COS 音频。'; });
+    document.querySelector('#backward').addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 15); });
+    document.querySelector('#forward').addEventListener('click', () => { audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 15); });
+    speed.addEventListener('click', () => {
+      const next = (speeds.indexOf(audio.playbackRate) + 1) % speeds.length;
+      audio.playbackRate = speeds[next];
+      speed.textContent = `倍速 ${speeds[next]}×`;
+    });
+
+    const readStart = document.querySelector('#read-start');
+    const readStop = document.querySelector('#read-stop');
+    const speechStatus = document.querySelector('#speech-status');
+    const supported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+    if (!supported) { readStart.disabled = true; speechStatus.textContent = '此浏览器不支持摘要朗读；仍可收听上方原音。'; }
+    function stopSpeech() {
+      if (supported) speechSynthesis.cancel();
+      readStart.hidden = false;
+      readStop.hidden = true;
+      if (supported) speechStatus.textContent = '摘要朗读已停止。';
+    }
+    readStart.addEventListener('click', () => {
+      audio.pause();
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance([...document.querySelectorAll('#summary-script p')].map(paragraph => paragraph.textContent).join('\n'));
+      utterance.lang = 'zh-CN';
+      utterance.rate = 1;
+      utterance.onend = stopSpeech;
+      utterance.onerror = () => { stopSpeech(); speechStatus.textContent = '朗读未能启动；请检查设备的中文语音设置。'; };
+      readStart.hidden = true;
+      readStop.hidden = false;
+      speechStatus.textContent = '正在朗读短摘要…';
+      speechSynthesis.speak(utterance);
+    });
+    readStop.addEventListener('click', stopSpeech);
+    audio.addEventListener('play', () => { if (supported && speechSynthesis.speaking) stopSpeech(); });
+  </script>
+</body>
+</html>
